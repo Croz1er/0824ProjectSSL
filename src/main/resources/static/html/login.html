@@ -69,7 +69,7 @@
 
         //刷新验证码
         $("img").on("click",function () {
-            $(this).prop("src","http://localhost:8080/captcha.do?time="+new Date().getTime())
+            $(this).prop("src","http://localhost:8082/captcha.do?time="+new Date().getTime())
         });
 
         // 进行登录操作
@@ -90,7 +90,7 @@
 
             //通过ajax提交数据
             $.ajax({
-                url:"http://localhost:8080/login.do",
+                url:"http://localhost:8082/login.do",
                 type:"post",
                 data:data,
                 dataType:"json",
