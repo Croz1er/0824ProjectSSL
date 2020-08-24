@@ -27,6 +27,7 @@ public class GlobalCorsConfig implements WebMvcConfigurer {
                 .allowCredentials(true);
     }
 
+
     @Bean
     public FilterRegistrationBean corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

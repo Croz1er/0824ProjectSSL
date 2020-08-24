@@ -3,6 +3,7 @@
 
 	<head>
 		<meta charset="utf-8">
+
 		<title>上元代理商管理系统</title>
 		<meta name="keywords" content="上元代理商管理系统">
 		<meta name="description" content="上元代理商管理系统">
@@ -196,22 +197,23 @@
 				});
 
 				$('.login-out').on("click", function() {
-					$.ajax({
-					url: "http://127.0.0.1:8082/user/logout.do",
-					type: "get",
-					dataType: "json",
-					xhrFields: {
-						// 发送 AJAX 请求时带上 cookie
-						withCredentials: true
-					},
-					success: function(rec) {
-						if(rec.code==0){
-							layer.msg('退出登录成功', function() {
-								window.location = 'login.html';
-							});
-						}
-					}
-				});
+				// 	$.ajax({
+				// 	url: "http://127.0.0.1:8080/cas/logout",
+				// 	type: "get",
+				// 	dataType: "json",
+				// 	xhrFields: {
+				// 		// 发送 AJAX 请求时带上 cookie
+				// 		withCredentials: true
+				// 	},
+				// 	success: function(rec) {
+				// 		if(rec.code==0){
+				// 			layer.msg('退出登录成功', function() {
+				// 				window.location = 'login.html';
+				// 			});
+				// 		}
+				// 	}
+				// });
+					window.location.href="http://127.0.0.1:8080/cas/logout"
 
 				});
 			});

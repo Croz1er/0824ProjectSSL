@@ -1,11 +1,11 @@
 {
   "homeInfo": {
     "title": "首页",
-    "href": "welcome.html?t=1"
+    "href": "/html/welcome.html?t=1"
   },
   "logoInfo": {
     "title": "上元教育",
-    "image": "images/logo.png",
+    "image": "/images/logo.png",
     "href": ""
   },
   "menuInfo": [
@@ -47,20 +47,20 @@
            "child": [
             {
               "title": "用户注册",
-              "href": "a3.html",
+              "href": "/html/user/register.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "正式会员",
-              "href": "a4.html",
+              "href": "/html/user/realMember.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }
             ,
             {
               "title": "注册会员",
-              "href": "a5.html",
+              "href": "/html/user/registerMember.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }

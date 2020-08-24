@@ -16,7 +16,7 @@ public class CORSInterceptor implements HandlerInterceptor {
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Headers", "Accept, Origin, X-Requested-With, Content-Type,Last-Modified,device,token");
-
+        response.setHeader("X-Frame-Options", "SAMEORIGIN");
         return true;
     }
 
