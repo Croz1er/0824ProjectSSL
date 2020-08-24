@@ -1,4 +1,4 @@
-package com.deer.common.pojo;
+package com.deer.ljy.pojo;
 
 import lombok.Data;
 
