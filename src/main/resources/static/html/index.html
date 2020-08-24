@@ -149,16 +149,16 @@
 
 				//获取登录用户
 				$.ajax({
-					url: "http://localhost:8080/session.do",
-					type: "post",
+					url: "http://127.0.0.1:8082/user/session.do",
+					type: "get",
 					dataType: "json",
-					xhrFields: {
-						// 发送 AJAX 请求时带上 cookie
-						withCredentials: true
-					},
+					// xhrFields: {
+					// 	// 发送 AJAX 请求时带上 cookie
+					// 	withCredentials: true
+					// },
 					success: function(rec) {
 						//当前用户不存在
-						if(rec.code != 0) {
+						if(rec.code !== 0) {
 							layer.alert(rec.msg, function(index) {
 								window.location = "login.html";
 								layer.close(index);
@@ -166,8 +166,8 @@
 						} else {
 							$("#sessionUser").html(rec.data.username);
 							var options = {
-								iniUrl: "api/init.json", // 初始化接口
-								clearUrl: "api/clear.json", // 缓存清理接口
+								iniUrl: "/api/init.json", // 初始化接口
+								clearUrl: "/api/clear.json", // 缓存清理接口
 								urlHashLocation: true, // 是否打开hash定位
 								bgColorDefault: false, // 主题默认配置
 								multiModule: true, // 是否开启多模块
@@ -182,8 +182,8 @@
 					}
 
 				});
-				
-			
+
+
 
 				// 百度统计代码，只统计指定域名
 				miniTongji.render({
@@ -197,14 +197,14 @@
 
 				$('.login-out').on("click", function() {
 					$.ajax({
-					url: "http://localhost:8080/logout.do",
-					type: "post",
+					url: "http://127.0.0.1:8082/user/logout.do",
+					type: "get",
 					dataType: "json",
 					xhrFields: {
 						// 发送 AJAX 请求时带上 cookie
 						withCredentials: true
 					},
-					success: function(rec) {						
+					success: function(rec) {
 						if(rec.code==0){
 							layer.msg('退出登录成功', function() {
 								window.location = 'login.html';
@@ -212,7 +212,7 @@
 						}
 					}
 				});
-					
+
 				});
 			});
 		</script>
