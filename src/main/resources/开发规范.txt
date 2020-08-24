@@ -1,0 +1,13 @@
+一.Contoller层CRUD方法命名
+1.增加:add.do
+2.删除:remove.do
+3.修改:modify.do
+4.查询单个:find.do
+5.分页查询:page.do
+6.查询所有:list.do
+7.查看详情:info.do
+
+二.请求方式:
+  /模块名/操作
+  /user/add.do
+

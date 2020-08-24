@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>menu</title>
+    <link rel="stylesheet" href="../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <style>
+        .layui-btn:not(.layui-btn-lg ):not(.layui-btn-sm):not(.layui-btn-xs) {
+            height: 34px;
+            line-height: 34px;
+            padding: 0 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+       		<form class="layui-form" action="">
+       			<input type="hidden" name="parentId" value=""/>
+	            <div class="layui-form-item">
+	                <label class="layui-form-label">父级菜单</label>
+	                <div class="layui-input-block">
+	                    <input type="text" name="title" lay-verify="title" autocomplete="off"  class="layui-input" value="" readonly="readonly">
+	                </div>
+	            </div>
+	            <div class="layui-form-item">
+	                <label class="layui-form-label">权限名称</label>
+	                <div class="layui-input-block">
+	                    <input type="text" name="funcName" lay-verify="required" lay-reqtext="权限名称不能为空" placeholder="请输入" autocomplete="off" class="layui-input">
+	                </div>
+	            </div>
+	             <div class="layui-form-item">
+	                <label class="layui-form-label">权限标识</label>
+	                <div class="layui-input-block">
+	                    <input type="text" name="funcCode" lay-verify="required" lay-reqtext="权限标识不能为空" placeholder="请输入" autocomplete="off" class="layui-input">
+	                </div>
+	            </div>
+	             <div class="layui-form-item">
+	                <label class="layui-form-label">权限URL</label>
+	                <div class="layui-input-block">
+	                    <input type="text" name="funcUrl" lay-verify="required" lay-reqtext="URL不能为空" placeholder="请输入" autocomplete="off" class="layui-input">
+	                </div>
+	            </div>
+	            <div class="layui-form-item">
+	                <div class="layui-input-block">
+	                    <button class="layui-btn" lay-submit="" lay-filter="add">立即提交</button>
+	                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	                </div>
+            	</div>
+           </form>
+    </div>
+</div>
+<script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+
+<script>
+	
+	//1.填充数据parentId,父级菜单
+	layui.use(['layer', 'form','jquery'], function () {
+		var form = layui.form;
+		var $ = layui.jquery;
+		var layer = layui.layer;
+		//获取父菜单Id
+		var queryString = window.location.search.substring(1);//如   ?id=1 
+		 $.ajax({
+                url:"http://localhost:8080/func/find.do",
+                type:"post",
+                data:queryString,
+                dataType:"json",
+                xhrFields:{
+                    // 发送 AJAX 请求时带上 cookie
+                    withCredentials:true
+                },
+                success:function (rec) {
+                   //填充数据parentId
+                   $("input[type='hidden']").val(rec.data.id);
+                   //填充数据parentName
+                   $("input[name='title']").val(rec.data.funcName);
+                }
+            })
+
+		 //表单数据校验及提交
+		    form.on('submit(add)', function (data) {
+            data = data.field;
+            if (data.funcName == '') {
+                layer.msg('权限名不能为空');
+                return false;
+            }
+            if (data.funcCode == '') {
+                layer.msg('权限标识不能为空');
+                return false;
+            }
+            if (data.funcUrl == '') {
+                layer.msg('URL不能为空');
+                return false;
+            }
+
+            //通过ajax提交数据
+            $.ajax({
+                url:"http://localhost:8080/func/add.do",
+                type:"post",
+                data:data,
+                dataType:"json",
+                xhrFields:{
+                    // 发送 AJAX 请求时带上 cookie
+                    withCredentials:true
+                },
+                success:function (rec) {
+             		layer.msg(rec.msg);
+                }
+            })
+
+            return false;
+        });
+		
+	});
+	
+</script>
+</body>
+</html>

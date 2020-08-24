@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>menu</title>
+    <link rel="stylesheet" href="../lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <style>
+        .layui-btn:not(.layui-btn-lg ):not(.layui-btn-sm):not(.layui-btn-xs) {
+            height: 34px;
+            line-height: 34px;
+            padding: 0 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+
+    <div class="layuimini-main">
+        <blockquote class="layui-elem-quote">
+        	<form class="layui-form" action="">
+	        	 <div class="layui-form-item">
+	                <label class="layui-form-label">角色：</label>
+	                <div class="layui-input-block" id="roleDiv">
+	                   
+	                </div>
+	            </div>
+	        </form>
+        </blockquote>
+        <div>
+            <div class="layui-btn-group">
+                <button class="layui-btn" id="btn-expand">全部展开</button>
+                <button class="layui-btn layui-btn-normal" id="btn-fold">全部折叠</button>
+                
+            </div>
+            <table id="munu-table" class="layui-table" lay-filter="munu-table"></table>
+        </div>
+    </div>
+</div>
+<!-- 操作列 -->
+<script type="text/html" id="auth-state">
+	<a class="layui-btn layui-btn-xs" lay-event="add">增加</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!--头部工具栏-->
+<script type="text/html" id="headertoolbar">
+  <div class="layui-btn-container">
+    <button class="layui-btn layui-btn-warm" lay-event="addRole">保存权限</button>
+  </div>
+</script>
+ 
+
+<script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+    layui.use(['table', 'treetable','layer','form'], function () {
+        var $ = layui.jquery;
+        var table = layui.table;
+        var treetable = layui.treetable;
+        var layer = layui.layer;
+        var form = layui.form;
+        
+        //获取角色列表
+          $.ajax({
+                url:"http://localhost:8080/role/page.do",
+                type:"post",
+                dataType:"json",
+                async: false,
+                xhrFields:{
+                    // 发送 AJAX 请求时带上 cookie
+                    withCredentials:true
+                },
+                success:function (rec) {
+                	
+                   if(rec.code==0){
+                   	  var roles = rec.data;
+	                   var str = "";
+	                   for(var i in roles){
+	                   		var role = roles[i];
+	                   		if(role.id==1){
+	                   			str+="<input type='radio' lay-filter='rolefilter' name='roleId' value='"+role.id+"' title='"+role.roleName+"' checked='checked'>"
+	                   		}else{
+	                   			str+="<input type='radio' lay-filter='rolefilter' name='roleId' value='"+role.id+"' title='"+role.roleName+"'>"
+	                   		}
+	             
+	                   }
+	                   
+	                   $("#roleDiv").html(str);
+	                   //重新刷新表单
+	                   form.render();
+	                   
+	                   //显示默认被选中的角色应的权限(判断哪个radio被选中)
+	                   var roleId = 1;
+	                   loadTable(roleId);
+	                
+                   }else{
+                   		layer.msg(rec.msg,function(){
+                   			parent.window.location.href="../html/index.html"
+                   		})
+                   }
+                 
+                },
+                error:function(){
+                	layer.msg("error")
+                }
+            })
+        //选中角色时,显示相应权限
+        //监听单选框
+     	form.on('radio(rolefilter)', function(data){
+     		var roleId = data.value;
+     		loadTable(roleId);
+     	});
+      
+          
+        // 渲染表格
+        function loadTable(roleId){
+        	    layer.load(2);//正在加载的图层
+		        treetable.render({
+		            treeColIndex: 1,
+		            treeSpid: -1,
+		            treeIdName: 'authorityId',
+		            treePidName: 'parentId',
+		            elem: '#munu-table',
+		            url: 'http://localhost:8080/menu/find.do',//调用我的权限管理接口
+		            where:{'roleId':roleId},
+		            page: false,
+		            toolbar: '#headertoolbar',//开启头部工具栏
+		            cols: [[
+		                {type: 'checkbox'},
+		                {field: 'authorityName', minWidth: 200, title: '权限名称'},
+		                {field: 'authority', title: '权限标识'},
+		                {field: 'menuUrl', title: '菜单url'},
+		                {field: 'orderNumber', width: 80, align: 'center', title: 'ID'},
+		                {
+		                    field: 'isMenu', width: 80, align: 'center', templet: function (d) {
+		                        if (d.isMenu == 1) {
+		                            return '<span class="layui-badge layui-bg-gray">按钮</span>';
+		                        }
+		                        if (d.parentId == -1) {
+		                            return '<span class="layui-badge layui-bg-blue">目录</span>';
+		                        } else {
+		                            return '<span class="layui-badge-rim">菜单</span>';
+		                        }
+		                    }, title: "类型"
+		                },
+		                {templet: '#auth-state', width: 200, align: 'center', title: '操作'}
+		            ]],
+		            done: function () {
+		                layer.closeAll('loading');
+		            }
+		        });
+        }
+        
+
+       
+      
+
+        $('#btn-expand').click(function () {
+            treetable.expandAll('#munu-table');
+        });
+
+        $('#btn-fold').click(function () {
+            treetable.foldAll('#munu-table');
+        });
+        
+        //头工具栏事件
+		  table.on('toolbar(munu-table)', function(obj){
+		    var checkStatus = table.checkStatus(obj.config.id);
+		    switch(obj.event){
+		      case 'addRole':
+		        var data = checkStatus.data;
+		        //权限的id集合,角色的id
+		        var roleId = $("input[type='radio']:checked").val();
+		        var str = "roleId="+roleId;
+		        for(var i in data){
+		        	 var funcId = data[i].id;
+		        	 str+="&funcId="+funcId;
+		        }
+		      
+		      
+		         $.ajax({
+	                url:"http://localhost:8080/menu/modify.do",
+	                type:"post",
+	                data:str,
+	                dataType:"json",
+	                async: false,
+	                xhrFields:{
+	                    // 发送 AJAX 请求时带上 cookie
+	                    withCredentials:true
+	                },
+	                success:function (rec) {
+	                	layer.msg(rec.msg);
+	                }
+	             });
+		      break;
+		    };
+		  });
+
+        //监听工具条
+        table.on('tool(munu-table)', function (obj) {
+            var data = obj.data;
+            var layEvent = obj.event;
+
+            if (layEvent === 'del') {
+                layer.msg('删除' + data.id);
+            } else if (layEvent === 'edit') {
+                layer.msg('修改' + data.id);
+            }else if(layEvent === 'add'){
+            	//layer.msg("增加"+data.id)
+            	//弹出层,用来填写菜单信息
+            	layer.open({
+            		type:2,
+            		area: ['800px', '600px'],
+  					content: 'menu_add.html?id='+data.id,
+  					cancel: function(index, layero){ 
+						  //刷新页面
+						  window.location.reload();
+					}    
+				});
+            	
+            }
+        });
+    });
+</script>
+</body>
+</html>
