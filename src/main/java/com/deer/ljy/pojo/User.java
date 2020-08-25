@@ -1,6 +1,7 @@
 package com.deer.ljy.pojo;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -24,13 +25,16 @@ public class User implements Serializable {
     private String email;
     private String postCode;
     private String userAddress;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
     private Integer referId;
     private String referCode;
     private Integer roleId;
     private String roleName;
     private Integer isStart;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date lastUpdateTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date lastLoginTime;
     private String bankAccount;
     private String bankName;

@@ -41,7 +41,7 @@
         
         {
           "title": "用户管理",
-          "href": "b.html",
+          "href": "/html/user/userIndex.html",
           "icon": "fa fa-window-maximize",
           "target": "_self",
            "child": [
@@ -59,8 +59,14 @@
             }
             ,
             {
-              "title": "注册会员",
-              "href": "/html/user/registerMember.html",
+              "title": "修改一级密码",
+              "href": "/html/user/user-password.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "修改二级密码",
+              "href": "/html/user/user-password2.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }
