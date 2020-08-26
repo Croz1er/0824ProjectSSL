@@ -1,5 +1,8 @@
 package com.deer.qx.model.account;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -10,7 +13,9 @@ public class User_account implements Serializable {
     private Integer userId;
     //账号余额
     private  Double balance;
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date createTime;
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date lastUpdateTime;
     private String createBy;
     //0锁定,1锁定

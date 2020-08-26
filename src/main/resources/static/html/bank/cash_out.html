@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>系统设置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+
+    <!-- <style>
+         .layui-form-item .layui-input-company {width: auto;padding-right: 10px;line-height: 38px;}
+     </style>-->
+</head>
+<body>
+<form class="layui-form">
+
+      <div class="layui-form-item">
+        <label class="layui-form-label" style="line-height: 5px">余额:</label>
+        <div class="layui-input-inline">
+            <span style="color: red" id="balance"></span>(元)
+        </div>
+
+       </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">提现金额:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="money" autocomplete="off" class="layui-input">
+                </div>
+                <span style="color: red ;font-size: 12px;line-height: 3">提现金额不能大于余额*</span>
+        </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">银行所在地址及支行详细名称:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="address" autocomplete="off" class="layui-input">
+                </div>
+                <span style="color: red ;font-size: 12px;line-height: 3">*</span>
+            </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择银行</label>
+        <div class="layui-input-inline">
+            <select name="modules" lay-verify="required" lay-search="">
+                <option value="">请选择</option>
+                <option value="1">中国银行</option>
+
+            </select>
+        </div>
+        <span style="color: red ;font-size: 12px;line-height: 3">*</span>
+    </div>
+
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">银行开户名:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="bankName" autocomplete="off" class="layui-input">
+        </div>
+        <span style="color: red ;font-size: 12px;line-height: 3">*</span>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">银行卡号:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="card" autocomplete="off" class="layui-input">
+        </div>
+        <span style="color: red ;font-size: 12px;line-height: 3">*</span>
+
+    </div>
+
+
+
+        <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="setting">提交申请</button>
+                </div>
+
+    </div>
+</form>
+<script src="/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form'], function () {
+        var $ = layui.jquery;
+        var form = layui.form
+            , layer = layui.layer;
+
+        //监听提交
+        form.on('submit(setting)', function (data) {
+            var money = $("input[name='money']").val();
+
+            $.ajax({
+                url:"/bank/addOut.do",
+                data:{
+                    moneyOut:money,
+                    balance:money,
+                },
+                type:"get",
+                dataType:"json",
+                async:false,
+                success:function (rec) {
+                    if(rec.code==0){
+                        alert("汇款成功")
+                    }else {
+                        alert("汇款失败")
+                    }
+                },
+            })
+        });
+
+
+        $.ajax({
+            url:"/bank/findList.do",
+            type:"get",
+            dataType:"json",
+            success:function (r) {
+                var data = r.data;
+                $("#balance").html(data[0].balance)
+
+            }
+        })
+
+    });
+</script>
+</body>
+</html>

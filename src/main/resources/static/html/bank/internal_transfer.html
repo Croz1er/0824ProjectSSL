@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>系统设置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+
+    <!-- <style>
+         .layui-form-item .layui-input-company {width: auto;padding-right: 10px;line-height: 38px;}
+     </style>-->
+</head>
+<body>
+<form class="layui-form">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="line-height: 5px">当前余额:</label>
+        <div class="layui-input-inline">
+            <span style="color: red" id="balance"></span>(元)
+        </div>
+
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" >目标会员:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="money" autocomplete="off" class="layui-input" id="name">
+        </div>
+        <span style="color: red ;font-size: 12px;line-height: 3">接收转帐的会员用户名必须填写正确，不能给註册会员转帐。</span>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" >转账金额:</label>
+        <div class="layui-input-inline">
+            <input type="text" name="money" autocomplete="off" class="layui-input" id="money">
+        </div>
+        <a href="#" style="color: #00b7ee;line-height: 3">余额不足,马上去汇款充值</a>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" >二级密码:</label>
+        <div class="layui-input-inline">
+            <input type="password" name="password" autocomplete="off" class="layui-input" id="pw2">
+        </div>
+
+    </div>
+
+
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="setting">提交</button>
+        </div>
+
+    </div>
+</form>
+<script src="/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form'], function () {
+        var $ = layui.jquery;
+        var form = layui.form
+            , layer = layui.layer;
+
+        //监听提交
+        form.on('submit(setting)', function (data) {
+            var name = $("#name").val();
+            var pw2 = $("#pw2").val();
+            $.ajax({
+                url: "/user/sessionUser.do",
+                type: "get",
+                dateType: "json",
+                async: false,
+                success: function (r) {
+
+                    $.ajax({
+                        url: "/bank/getUid.do",
+                        dataType: "json",
+                        Type: "get",
+                        async: false,
+                        data: {
+                            username: name,
+                        },
+                        success: function (rec) {
+                            if (rec.code == 1) {
+                                alert("会员名不存在")
+                            } else {
+                                var data1 = r.data;
+                                var money = $("#money").val();
+                                var data2 = rec.data;
+                                var id = data2.id;
+                                if (pw2 != data1.password2) {
+                                    alert("二级密码错误")
+                                } else {
+                                    $.ajax({
+                                        url: "/bank/transfer.do",
+                                        type: "get",
+                                        dataType: "json",
+                                        async: false,
+                                        data: {
+                                            id: id,
+                                            balance: money
+                                        },
+                                        success:function (rs) {
+                                            if(rs.code==0){
+                                                alert("转账成功")
+                                            }
+                                            else {
+                                                alert("转账失败")
+                                            }
+                                        }
+                                    })
+                                }
+                            }
+                        }
+                    })
+                }
+            })
+        });
+        $.ajax({
+            url: "/bank/findList.do",
+            type: "get",
+            dataType: "json",
+            success: function (r) {
+                var data = r.data;
+                $("#balance").html(data[0].balance)
+
+            }
+        })
+    });
+</script>
+</body>
+</html>

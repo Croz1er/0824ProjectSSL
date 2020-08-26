@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
 
 @SpringBootApplication(scanBasePackages = "com.deer")
 @MapperScan(value = {"com.deer.ljy.mapper","com.deer.qx.mapper"})
-@Import(value = {SpringShiroConfig.class, CasConfig.class, CORSInterceptor.class, GlobalCorsConfig.class})
+@Import(value = {SpringShiroConfig.class, GlobalCorsConfig.class})
 
 //扫描es包
 public class LjyQxSyshoppingApplication {

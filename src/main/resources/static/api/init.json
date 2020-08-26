@@ -74,7 +74,7 @@
           "child": [
             {
               "title": "商品信息",
-              "href": "a6.html",
+              "href": "/html/shopping/information.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
@@ -109,40 +109,40 @@
         },
         {
           "title": "电子银行",
-          "href": "e.html",
+          "href": "#",
           "icon": "fa fa-window-maximize",
           "target": "_self",
           "child": [
             {
               "title": "汇款充值",
-              "href": "a11.html",
+              "href": "/html/bank/add_money.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
-              "title": "汇款名细",
-              "href": "a12.html",
+              "title": "基本账户",
+              "href": "/html/bank/account.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }
             ,
             {
               "title": "申请提现",
-              "href": "a14.html",
+              "href": "/html/bank/cash_out.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "提现明细",
-              "href": "a15.html",
+              "href": "/html/bank/cash_detail.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }
            
             ,
             {
-              "title": "账户查看",
-              "href": "a16.html",
+              "title": "内部转账",
+              "href": "/html/bank/internal_transfer.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }

@@ -1,6 +1,6 @@
 package com.deer.qx.service.goods;
 
-import com.deer.qx.dao.goods.GoodsDao;
+import com.deer.qx.mapper.goods.GoodMapper;
 import com.deer.qx.model.goods.Goods_info;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.List;
 public class GoodsServiceImpl implements GoodsService {
 
     @Autowired
-    private GoodsDao goodsDao;
+    private GoodMapper goodsDao;
 
     @Override
     public List<Goods_info> selectAll() {

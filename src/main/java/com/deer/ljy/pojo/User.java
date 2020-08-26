@@ -38,4 +38,7 @@ public class User implements Serializable {
     private String idCardPicPath;
     private String bankPicPath;
 
+
+
+
 }

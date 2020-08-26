@@ -1,5 +1,8 @@
 package com.deer.qx.model.account;
 
+import org.springframework.data.annotation.Transient;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -9,7 +12,20 @@ public class Account_detail implements Serializable {
     //关联用户账户表
     private Integer accountId;
     //记录入账或出账日期
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date accountDate;
+    @Transient
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    private Date accountDate1;
+
+    public Date getAccountDate1() {
+        return accountDate1;
+    }
+
+    public void setAccountDate1(Date accountDate1) {
+        this.accountDate1 = accountDate1;
+    }
+
     //入账
     private Double moneyIn;
     //出账
@@ -18,6 +34,27 @@ public class Account_detail implements Serializable {
     private Integer type;
     //交易方账户
     private String otherAcountId;
+    @Transient
+    private  Double balance;
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
+    @Transient
+    private Integer userId;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public Integer getId() {
         return id;
