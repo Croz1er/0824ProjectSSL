@@ -107,7 +107,7 @@ public class SpringShiroConfig {
         Map<String,String> filterChainDefinitionMap = new LinkedHashMap<String,String>();
 
         // 配置不会被拦截的链接 顺序判断
-        filterChainDefinitionMap.put("/cas/logout", "logoutFilter");//CAS登出
+        filterChainDefinitionMap.put("/logout", "logoutFilter");//CAS登出
         filterChainDefinitionMap.put("/callback", "callbackFilter");//CAS认证成功,回调原访问路径
         filterChainDefinitionMap.put("/login.do", "anon");
         filterChainDefinitionMap.put("/captcha.do", "anon");

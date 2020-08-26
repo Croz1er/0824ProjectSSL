@@ -77,7 +77,7 @@
 									<hr>
 								</dd>
 								<dd>
-									<a href="javascript:;" class="login-out">退出登录</a>
+									<a href="/logout" class="login-out">退出登录</a>
 								</dd>
 							</dl>
 						</li>
@@ -153,10 +153,10 @@
 					url: "http://127.0.0.1:8082/user/session.do",
 					type: "get",
 					dataType: "json",
-					// xhrFields: {
-					// 	// 发送 AJAX 请求时带上 cookie
-					// 	withCredentials: true
-					// },
+					xhrFields: {
+						// 发送 AJAX 请求时带上 cookie
+						withCredentials: true
+					},
 					success: function(rec) {
 						//当前用户不存在
 						if(rec.code !== 0) {
@@ -196,25 +196,9 @@
 					],
 				});
 
-				$('.login-out').on("click", function() {
-					$.ajax({
-					url: "http://127.0.0.1:8082/user/logout.do",
-					type: "get",
-					dataType: "json",
-					xhrFields: {
-						// 发送 AJAX 请求时带上 cookie
-						withCredentials: true
-					},
-					success: function(rec) {
-						if(rec.code==0){
-							layer.msg('退出登录成功', function() {
-								window.location = 'login.html';
-							});
-						}
-					}
-				});
-
-				});
+				// $('.login-out').on("click", function() {
+				// 	window.location.href="/logout"
+				// });
 			});
 		</script>
 	</body>
