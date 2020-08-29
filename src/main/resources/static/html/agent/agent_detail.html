@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui/css/layui.css" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+
+<div >
+    当前用户：<span  name="username" id="username" ></span>
+</div>
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">审核</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+<script src="/lib/layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+        var $ = layui.jquery;
+
+        //温馨提示：默认由前端自动合计当前行数据。从 layui 2.5.6 开始： 若接口直接返回了合计行数据，则优先读取接口合计行数据。
+        //详见：https://www.layui.com/doc/modules/table.html#totalRow
+        var agent = table.render({
+            elem: '#test'
+            ,url:'/agent/findAll.do'
+            ,toolbar: '#toolbarDemo'
+            ,title: '代理商数据表'
+            ,cols: [[
+                {field: 'username', title: '代理商', align: 'center'}
+                , {field: 'id', title: 'ID', width: '15%', align: 'center', hide: true}
+                , {field: 'roleName', title: '会员类型', align: 'center'}
+                , {field: 'roleId', title: '提成', align: 'center', templet: function (rec) {
+                        return rec.roleId ===2  ? "50" :rec.roleId===3?"200":rec.roleId===4?"500":rec.roleId===5?"1000":"无"
+                    }}
+                , {
+                    field: 'isStart', title: '状态（启用/禁用）', align: 'center', templet: function (rec) {
+                        return rec.isStart === 1 ? "启用" :"未启用"
+                    }
+                }
+                , {field: 'lastUpdateTime', title: '最后修改时间', align: 'center',templet : "<div>{{layui.util.toDateString(d.lastUpdateTime, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
+                , {title: '操作', align: 'center', toolbar: '#barDemo'}
+            ]]
+            ,page: true
+        });
+
+
+
+        //监听工具条
+        table.on('tool(test)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'detail'){
+                layer.msg('ID：'+ data.id + ' 的查看操作');
+            } else if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+
+                    $.ajax({
+                        url:"/agent/del.do",
+                        dataType:"json",
+                        type:"post",
+                        data:{
+                            id:data.id,
+                        }
+                    })
+                    layer.close(index);
+                    agent.reload()
+                });
+            } else if(obj.event === 'edit'){
+                layer.confirm('是否通过', function(index){
+
+                    $.ajax({
+                        url:"/agent/update.do",
+                        dataType:"json",
+                        type:"post",
+                        data:{
+                            id:data.id,
+                        }
+                    })
+                    layer.close(index);
+                    agent.reload()
+                });
+            }
+        });
+
+
+
+        $.ajax({
+            url: "/user/sessionUser.do",
+            dataType: "json",
+            type: "post",
+            success: function (r) {
+                    $("#username").html(r.data.username)
+
+            }
+        })
+
+
+    });
+</script>
+
+</body>
+</html>

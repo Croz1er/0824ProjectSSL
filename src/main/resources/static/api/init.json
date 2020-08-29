@@ -23,7 +23,7 @@
           "child": [
             {
               "title": "代理商明细",
-              "href": "a1.html",
+              "href": "/html/agent/agent_detail.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
@@ -68,32 +68,34 @@
           "target": "_self",
           "child": [
             {
-              "title": "商品信息",
-              "href": "/html/shopping/information.html",
+              "title": "商品管理",
+              "href": "/html/shopping/goodsAdd.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
-              "title": "商品套餐",
-              "href": "a7.html",
+              "title": "商品信息",
+              "href": "/html/shopping/goodsInfo.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "会员购买",
-              "href": "a8.html",
+              "href": "/html/shopping/buyVip.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "购物车",
-              "href": "a9.html",
+              "href": "/html/shopping/cart.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
-            },
+            }
+
+          ,
             {
               "title": "订单明细",
-              "href": "a10.html",
+              "href": "/html/shopping/order_details.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }
@@ -116,10 +118,11 @@
               "href": "/html/bank/account.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
-            },
+            }
+          ,
             {
               "title": "申请提现",
-              "href": "/html/bank/cash_out.html",
+              "href": "/html/bank/form-step.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
@@ -128,7 +131,9 @@
               "href": "/html/bank/cash_detail.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
-            },
+            }
+
+          ,
             {
               "title": "内部转账",
               "href": "/html/bank/internal_transfer.html",
@@ -145,25 +150,19 @@
           "child": [
             {
               "title": "公告管理",
-              "href": "a17.html",
+              "href": "/html/notice/notice.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "资讯管理",
-              "href": "a28.html",
-              "icon": "fa fa-tachometer",
-              "target": "_self"
-            },
-            {
-              "title": "下载中心",
-              "href": "a38.html",
+              "href": "/html/notice/counsel.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "留言管理",
-              "href": "a48.html",
+              "href": "/html/notice/leaveMessage.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }

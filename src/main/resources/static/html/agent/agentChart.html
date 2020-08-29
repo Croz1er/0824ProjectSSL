@@ -142,20 +142,22 @@
                      * MP柱状图
                      */
                     var echartsDataset = echarts.init(document.getElementById('echarts-dataset'), 'walden');
-                    var source1 = "{product: 'username'";
+                    var source1 = "{product: 'num'";
                     let sources = [];
 
-                    for (let roleName of num) {
+                    for (let roleName of username) {
                         let obj = {product: roleName};
                         //元数据的遍历
                         sources.push(obj);
                     }
+                    console.log(sources)
 
                     let series = [];
                     console.log(num.length);
-                    for (let i = 0; i < (username.length <= 5 ? username.length : 5); i++) {
+                    for (let i = 0; i < (num.length <= 5 ? num.length : 5); i++) {
                         series.push({type: 'bar'})
                     }
+                    // console.log(series)
 
                     var optionDataset = {
                         legend: {},
@@ -163,7 +165,7 @@
                         dataset: {
                             dimensions: username,
                             source: [
-                                num
+                                num,
                             ]
                         },
                         xAxis: {type: 'category'},
@@ -171,11 +173,8 @@
                         series: series
                     };
                     echartsDataset.setOption(optionDataset);
-
                 }
             });
-
-
     });
 </script>
 </body>

@@ -24,6 +24,56 @@ public class Order_goods implements Serializable {
     //关联订单表
     private Integer orderInfoId;
 
+    private Double money;
+
+    private Integer cid;
+
+    private Integer status;
+    //关联用户表
+    private Integer userId;
+
+    private Integer orderCode;
+
+    public Integer getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(Integer orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getCid() {
+        return cid;
+    }
+
+    public void setCid(Integer cid) {
+        this.cid = cid;
+    }
+
+    public Double getMoney() {
+        return money;
+    }
+
+    public void setMoney(Double money) {
+        this.money = money;
+    }
+
     public Integer getId() {
         return id;
     }

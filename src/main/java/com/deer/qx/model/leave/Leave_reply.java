@@ -3,7 +3,7 @@ package com.deer.qx.model.leave;
 import java.io.Serializable;
 import java.util.Date;
 
-public class leave_reply implements Serializable {
+public class Leave_reply implements Serializable {
 
     private Integer id;
     //留言ID

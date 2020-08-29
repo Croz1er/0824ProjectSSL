@@ -1,6 +1,8 @@
 package com.deer.qx.model.goods;
 
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 /*
@@ -16,7 +18,7 @@ public class Goods_info implements Serializable {
     //商品规格
     private String goodsFormat;
     //市场价
-    private Double markePrice;
+    private Double marketPrice;
     //优惠价
     private Double realPrice;
     //状态（1.上架   2.下架）
@@ -28,8 +30,10 @@ public class Goods_info implements Serializable {
     //单位
     private String unit;
     //创建时间
-    private Date crreateTime;
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    private Date createTime;
     //最后更新时间
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date lastUpdateTime;
     //创建人
     private String createdBy;
@@ -67,12 +71,12 @@ public class Goods_info implements Serializable {
         this.goodsFormat = goodsFormat;
     }
 
-    public Double getMarkePrice() {
-        return markePrice;
+    public Double getMarketPrice() {
+        return marketPrice;
     }
 
-    public void setMarkePrice(Double markePrice) {
-        this.markePrice = markePrice;
+    public void setMarketPrice(Double marketPrice) {
+        this.marketPrice = marketPrice;
     }
 
     public Double getRealPrice() {
@@ -115,12 +119,12 @@ public class Goods_info implements Serializable {
         this.unit = unit;
     }
 
-    public Date getCrreateTime() {
-        return crreateTime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCrreateTime(Date crreateTime) {
-        this.crreateTime = crreateTime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public Date getLastUpdateTime() {
