@@ -225,18 +225,6 @@
 
 
         function init() {
-            $.ajax({
-                url: "http://127.0.0.1:8082/user/checking.do",
-                type: "get",
-                dataType: "json",
-                success: function (rec) {
-                    if (rec.code !== 0) {
-                        layer.msg("非管理员无权访问用户注册页面,请联系管理员", {icon: 5, time: 1500}, function () {
-                            window.location.href = "/html/user/userIndex.html";
-                        })
-                    }
-                }
-            });
 
             $.ajax({
                 url: "http://127.0.0.1:8082/role/findAllRole.do",
