@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>用户管理页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+    <script src="/js/chart/echarts.min.js"></script>
+</head>
+<style>
+    .layui-top-box {
+        padding: 40px 20px 20px 20px;
+        color: #fff
+    }
+
+    .layuimini-container {
+        /*background-color: rgba(233, 150, 122, 0.34);*/
+    }
+
+    .panel {
+        margin-bottom: 17px;
+        background-color: #fff;
+        border: 1px solid transparent;
+        border-radius: 3px;
+        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .05)
+    }
+
+    .panel-body {
+        padding: 15px
+    }
+
+    .panel-title {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 14px;
+        color: inherit
+    }
+
+    .label {
+        display: inline;
+        padding: .2em .6em .3em;
+        font-size: 75%;
+        font-weight: 700;
+        line-height: 1;
+        color: #fff;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: .25em;
+        margin-top: .3em;
+    }
+
+    .layui-red {
+        color: red
+    }
+
+    .main_btn > p {
+        height: 40px;
+    }
+
+    .layui-btn {
+        background-color: black;
+    }
+
+    .layui-table-cell {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+</style>
+<body>
+<div class="layuimini-container">
+
+    <table width="100%" height="90%" border="0" cellpadding="5" cellspacing="0" class="main_tabbor">
+        <!-- 数据展示区 -->
+        <tr valign="top">
+            <td height="20">
+                <input type="hidden" name="id" id="id">
+                <div id="main" style="margin: auto; width: 600px;height:400px;"></div>
+            </td>
+        </tr>
+    </table>
+
+
+</div>
+<script src="/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+</body>
+<script>
+    layui.use(['form', 'table', `upload`, 'layer', 'jquery', 'laydate'], function () {
+        var form = layui.form;
+        var table = layui.table;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var laydate = layui.laydate;
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '奖金图表'
+            },
+            tooltip: {},
+            legend: {
+                data: ['推荐人数', '奖励金额']//设置顶部  字段名和Y轴的字段名要保持一致
+            },
+            color: ['rgba(233,150,122,0.6)', 'rgba(30, 159, 255, 0.52)'],
+            xAxis: {
+                data: []
+            },
+            yAxis: [
+                {
+                    name: '推荐人数',
+                    type: 'value',
+                    // min: 0,
+                    // max: 400,
+                    // interval: Math.ceil(400 / 5),
+                    /*axisLabel: {
+                        formatter: '{value}k' //自定义y轴坐标轴的刻度标签
+                    }*/
+                },
+                {
+                    name: '奖励金额(人/200元)',
+                    type: 'value',
+                    // interval: Math.ceil(200 / 5),
+                    /*axisLabel: {
+                        formatter: '{value}'
+                    }*/
+                },
+
+            ],
+            series: [{
+                name: '推荐人数',
+                type: 'line',
+                // yAxisIndex: 1,
+                data: []
+            },
+                {
+                    name: '奖励金额',
+                    type: 'bar',
+                    yAxisIndex: 1,
+                    data: []
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option, true);
+
+        myChart.showLoading();    //数据加载完之前先显示一段简单的loading动画
+
+        $.ajax({
+            url: "/session.do",
+            type: "get",
+            async: true,
+            dataType: "json",
+            xhrFields: {
+                "withCredentials": true
+            },
+            success: function (rec) {
+                if (rec.code == 0) {
+                    $(`#id`).val(rec.data.id);
+                    $.ajax({
+                        type: "get",
+                        async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+                        url: "/reward/chart.do",    //请求发送到TestServlet处
+                        dataType: "json",        //返回数据形式为json
+                        success: function (result) {
+                            var peopleNum = [];    //用来盛放X轴坐标值
+                            var money = [];    //用来盛放X轴坐标值
+                            var date = [];    //日期数组（实际用来盛放y轴坐标值）
+                            //请求成功时执行该函数内容，result即为服务器返回的json对象
+                            // alert(result.length);
+                            if (result) {
+                                for (var i = 0; i < result.length; i++) {
+                                    // var num = result[i].peoplenum;
+                                    // var money = result[i].reward;
+                                    // console.log(result[i].toString());
+                                    // console.log(result[i].auUser.toString());
+                                    peopleNum.push(result[i].peoplenum);
+                                    money.push(result[i].reward);
+                                    date.push(result[i].auUser.username)
+                                }
+                                myChart.hideLoading();    //隐藏加载动画
+                                myChart.setOption({        //加载数据图表
+                                    xAxis: {
+                                        data: date
+                                    },
+                                    yAxis: [{
+                                        name: '奖励金额',
+                                        type: 'value',
+                                        data: money,
+                                        axisLine:
+                                            { // Y轴线...颜色
+                                                onZero: false,
+                                            },
+                                    }],
+                                    series: [
+                                        {data: peopleNum},
+                                        {
+                                            data: money
+                                        }
+                                    ]
+                                });
+                            }
+
+                        },
+                        error: function (errorMsg) {
+                            //请求失败时执行该函数
+                            layer.msg("图表请求数据失败!");
+                            myChart.hideLoading();
+                        }
+                    });
+                }
+            }
+        });
+
+    });
+</script>
+<script type="text/html" id="toolbarDemo">
+    <div style="display: flex;">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="updateUser">修改</button>
+            <!--            <button class="layui-btn layui-btn-sm" lay-event="deleteUser">删除</button>-->
+            <!--            <button class="layui-btn layui-btn-sm" lay-event="addUser">新增</button>-->
+        </div>
+        <div style="margin: auto" class="demoTable">
+            搜索用户：
+            <div class="layui-inline">
+                <input class="layui-input" name="username" id="username" autocomplete="off">
+            </div>
+            <input type="button" class="layui-btn" id="selectUser" value="搜索">
+        </div>
+    </div>
+</script>
+<script type="text/html" id="typeTpl">
+    {{#  if(d.isstart ==1 ){ }}
+    <p>启用</p>
+    {{#  } else if(d.isstart ==2 ){ }}
+    <p>未启用</p>
+    {{#  } }}
+</script>
+</html>

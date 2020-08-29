@@ -1,5 +1,8 @@
 package com.deer.qx.model.info;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -13,10 +16,16 @@ public class Affiche implements Serializable {
     //发布人
     private String publisher;
     //发布时间
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    @JsonFormat(pattern ="yyyy-MM-dd")
     private Date publishTime;
     //生效时间
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    @JsonFormat(pattern ="yyyy-MM-dd")
     private Date startTime;
     //失效时间
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    @JsonFormat(pattern ="yyyy-MM-dd")
     private Date endTime;
 
     public Integer getId() {

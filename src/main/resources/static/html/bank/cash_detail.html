@@ -22,13 +22,15 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">日期</label>
                 <div class="layui-input-inline">
-                    <input type="date" name="date" lay-verify="data" autocomplete="off" class="layui-input">
+                    <input type="date" name="date1" lay-verify="data" autocomplete="off" class="layui-input" id="date1">
                 </div>
                 <label class="layui-form-label" style="margin-left: 20px">to</label>
                 <div class="layui-input-inline">
-                    <input type="date" name="date" lay-verify="data" autocomplete="off" class="layui-input">
+                    <input type="date" name="date2" lay-verify="data" autocomplete="off" class="layui-input" id="date2">
                 </div>
-                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="setting">查询</button>
+                <button type="submit" class="layui-btn layui-btn-primary" lay-submit
+                        lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索
+                </button>
         </div>
 
 
@@ -54,27 +56,24 @@
             cols: [[
                 {type: "checkbox", width: 50},
                 {field: 'id',  title: 'ID', sort: true},
-                {field: 'accountDate',  title: '日期'},
+                {field: 'accountDate',  title: '日期',templet : "<div>{{layui.util.toDateString(d.accountDate, 'yyyy-MM-dd HH:mm:ss')}}</div>"},
                 {field: 'moneyOut',  title: '转账金额（元）', sort: true},
                 {field: 'moneyIn', title: '入账金额（元）'},
                 {field: 'type',  title: '状态', sort: true ,templet:function (rec) {
-                        return rec.type===1?"提现":"";
+                        return rec.type===1?"提现":rec.type===0?"充值":rec.type===2?"消费":rec.type===3?"收益":"未知";
                     }},
-                {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
             ]],
-            limits: [10, 15, 20, 25, 50, 100],
-            limit: 15,
+            limits: [5, 10, 15, 20, 25, 30],
+            limit: 5,
             page: true,
             skin: 'line'
         });
-
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
             var result = JSON.stringify(data.field);
             layer.alert(result, {
                 title: '最终的搜索信息'
             });
-
             //执行搜索重载
             table.reload('currentTableId', {
                 page: {
@@ -140,6 +139,40 @@
                     layer.close(index);
                 });
             }
+        });
+
+
+        // $("#find").on("click",function () {
+        //     var date1 = $("#date1").val();
+        //     var date2 = $("#date2").val();
+        //     $.ajax({
+        //         type:"get",
+        //         async: false,
+        //         url: '/bank/findOut.do',
+        //         data:{
+        //             staDate:date1,
+        //             endDate:date2,
+        //             page:1,
+        //             limit:5,
+        //         },
+        //     })
+        // })
+
+
+        form.on('submit(data-search-btn)', function (data) {
+            var date1 = $("#date1").val();
+            var date2 = $("#date2").val();
+            // console.log(parse.goodsName);
+            //执行搜索重载
+            table.reload('currentTableId', {
+                where: {
+                    staDate: date1,
+                    endDate: date2,
+                    page: 1,
+                    limit: 5
+                }
+            });
+            return false;
         });
 
     });

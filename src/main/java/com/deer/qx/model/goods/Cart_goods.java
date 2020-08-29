@@ -1,5 +1,8 @@
 package com.deer.qx.model.goods;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -21,9 +24,40 @@ public class Cart_goods implements Serializable {
     //创建人
     private String createBy;
     //创建时间
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date createTime;
     //修改时间
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    @JsonFormat(pattern ="yyyy-MM-dd")
     private Date lastUpdateTime;
+
+    private Double money;
+    private Integer statue;
+    private Integer userId;
+
+    public Integer getStatue() {
+        return statue;
+    }
+
+    public void setStatue(Integer statue) {
+        this.statue = statue;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Double getMoney() {
+        return money;
+    }
+
+    public void setMoney(Double money) {
+        this.money = money;
+    }
 
     public Integer getId() {
         return id;
