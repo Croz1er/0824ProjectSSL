@@ -20,10 +20,10 @@
           "href": "",
           "icon": "fa fa-window-maximize",
           "target": "_self",
-           "child": [
+          "child": [
             {
               "title": "代理商明细",
-              "href": "/html/agent/agent_detail.html",
+              "href": "a1.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
@@ -37,10 +37,10 @@
         },
         {
           "title": "用户管理",
-          "href": "/html/user/userIndex.html",
+          "href": "",
           "icon": "fa fa-window-maximize",
           "target": "_self",
-           "child": [
+          "child": [
             {
               "title": "用户注册",
               "href": "/html/user/register.html",
@@ -54,8 +54,8 @@
               "target": "_self"
             },
             {
-              "title": "修改二级密码",
-              "href": "/html/user/user-password2.html",
+              "title": "注册会员",
+              "href": "/html/user/temporary.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }
@@ -68,34 +68,32 @@
           "target": "_self",
           "child": [
             {
-              "title": "商品管理",
-              "href": "/html/shopping/goodsAdd.html",
+              "title": "商品信息",
+              "href": "/html/shopping/information.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
-              "title": "商品信息",
-              "href": "/html/shopping/goodsInfo.html",
+              "title": "商品套餐",
+              "href": "a7.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "会员购买",
-              "href": "/html/shopping/buyVip.html",
+              "href": "a8.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "购物车",
-              "href": "/html/shopping/cart.html",
+              "href": "a9.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
-            }
-
-            ,
+            },
             {
               "title": "订单明细",
-              "href": "/html/shopping/order_details.html",
+              "href": "a10.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }
@@ -118,11 +116,10 @@
               "href": "/html/bank/account.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
-            }
-            ,
+            },
             {
               "title": "申请提现",
-              "href": "/html/bank/form-step.html",
+              "href": "/html/bank/cash_out.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
@@ -131,9 +128,7 @@
               "href": "/html/bank/cash_detail.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
-            }
-
-            ,
+            },
             {
               "title": "内部转账",
               "href": "/html/bank/internal_transfer.html",
@@ -150,19 +145,25 @@
           "child": [
             {
               "title": "公告管理",
-              "href": "/html/notice/notice.html",
+              "href": "a17.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "资讯管理",
-              "href": "/html/notice/counsel.html",
+              "href": "a28.html",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "下载中心",
+              "href": "a38.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "留言管理",
-              "href": "/html/notice/leaveMessage.html",
+              "href": "a48.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }
@@ -176,54 +177,25 @@
           "child": [
             {
               "title": "角色管理",
-              "href": "a71.html",
+              "href": "/html/background/table.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "权限管理",
-              "href": "page/menu.html",
+              "href": "/html/background/menu.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             },
             {
               "title": "数据字典",
-              "href": "a63.html",
+              "href": "/html/dictionary/dictionary.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
-            }
-            ,
+            },
             {
               "title": "报表管理",
-              "href": "a54.html",
-              "icon": "fa fa-tachometer",
-              "target": "_self"
-            }
-          ]
-        }
-      ]
-    },
-
-
-
-
-
-
-    {
-      "title": "模板示例一",
-      "icon": "fa fa-lemon-o",
-      "href": "",
-      "target": "_self",
-      "child": [
-           {
-          "title": "主页模板",
-          "href": "",
-          "icon": "fa fa-home",
-          "target": "_self",
-          "child": [
-            {
-              "title": "主页一",
-              "href": "page/welcome-1.html",
+              "href": "/html/report/report.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }

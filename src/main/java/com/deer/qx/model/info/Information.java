@@ -1,7 +1,5 @@
 package com.deer.qx.model.info;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -21,7 +19,6 @@ public class Information implements Serializable {
     //发布人
     private String publisher;
     //发布时间
-    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date publishTime;
     //附件类型ID
     private Integer typeId;
@@ -32,9 +29,8 @@ public class Information implements Serializable {
     //附件存放路径
     private String filePath;
     //附件大小
-    private Integer fileSize;
+    private Double fileSize;
     //上传时间
-    @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date uploadTime;
 
     public Integer getId() {
@@ -117,11 +113,11 @@ public class Information implements Serializable {
         this.filePath = filePath;
     }
 
-    public Integer getFileSize() {
+    public Double getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(Integer fileSize) {
+    public void setFileSize(Double fileSize) {
         this.fileSize = fileSize;
     }
 

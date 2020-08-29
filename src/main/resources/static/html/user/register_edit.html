@@ -22,20 +22,22 @@
          </fieldset>-->
 
 
-        <form class="layui-form" lay-filter="register">
+        <form class="layui-form" lay-filter="numb_edit">
 
             <div class="layui-form-item">
 
-                <label class="layui-form-label">会员类型:</label>
-                <div class="layui-input-inline" lay-filter="roleName">
-                    <select name="roleId" id="roleId">
-                        <option value=""></option>
-                    </select>
-                </div>
-
-                <label class="layui-form-label">密码:</label>
+                <label class="layui-form-label">一级密码:</label>
                 <div class="layui-input-inline">
-                    <input type="password" name="password" lay-verify="required" autocomplete="off" class="layui-input">
+                    <input type="password" name="password" id="password" lay-verify="required" autocomplete="off"
+                           class="layui-input">
+                    <input type="hidden" name="id">
+                </div>
+                <div class="layui-form-mid layui-word-aux"><span style="color: red">*</span></div>
+
+                <label class="layui-form-label">确认一级密码:</label>
+                <div class="layui-input-inline">
+                    <input type="password" name="passwordAgain" id="passwordAgain"
+                           autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-mid layui-word-aux"><span style="color: red">*</span></div>
             </div>
@@ -44,14 +46,16 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">用户名 :</label>
                     <div class="layui-input-inline">
-                        <input type="tel" name="username" lay-verify="required" autocomplete="off" class="layui-input">
+                        <input type="text" name="username" readonly="readonly" lay-verify="required" autocomplete="off"
+                               class="layui-input">
                     </div>
 
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">真实姓名:</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="realName" lay-verify="required" autocomplete="off" class="layui-input">
+                        <input type="text" name="realName" lay-verify="required" autocomplete="off"
+                               class="layui-input">
                     </div>
                     <div class="layui-form-mid layui-word-aux"><span style="color: red">*</span></div>
                 </div>
@@ -95,16 +99,6 @@
 
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">推荐人 :</label>
-                    <div class="layui-input-inline" lay-filter="refer">
-                        <select name="referId" id="refer">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                    <div class="layui-form-mid layui-word-aux"><span style="color: red">*</span></div>
-                </div>
-
-                <div class="layui-inline">
                     <label class="layui-form-label">移动电话:</label>
                     <div class="layui-input-inline">
                         <input type="text" name="mobile" lay-verify="phone" autocomplete="off" class="layui-input">
@@ -125,7 +119,8 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">二级密码</label>
                     <div class="layui-input-inline">
-                        <input type="password" name="password2" lay-verify="required" autocomplete="off"
+                        <input type="password" readonly="readonly" name="password2" lay-verify="required"
+                               autocomplete="off"
                                class="layui-input">
                     </div>
                     <div class="layui-form-mid layui-word-aux"><span style="color: red">*</span></div>
@@ -156,24 +151,6 @@
                     </div>
                 </div>
             </div>
-
-            <!--            <div class="layui-form-item">-->
-            <!--                <div class="layui-inline">-->
-            <!--                    <label class="layui-form-label">上传身份证图片（正反面） :</label>-->
-            <!--                    <div class="layui-input-inline">-->
-            <!--                        <input type="file" name="idphoto">-->
-            <!--                    </div>-->
-
-            <!--                </div>-->
-            <!--                <div class="layui-inline">-->
-            <!--                    <label class="layui-form-label">上传银行卡图片</label>-->
-            <!--                    <div class="layui-input-inline">-->
-            <!--                        <input type="file" name="bankphoto">-->
-            <!--                    </div>-->
-            <!--                </div>-->
-            <!--            </div>-->
-
-
             <div class="layui-form-item layui-form-text">
                 <label class="layui-form-label">收货地址:</label>
                 <div class="layui-input-block">
@@ -194,74 +171,74 @@
 
     </div>
 </div>
-<script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+
 <script src="/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
 
+    function child(data) {
+        console.log(data);
+        fuc(data);
+    }
 
 
-    layui.use(['form', 'jquery', 'layedit', 'laydate'], function () {
-        var form = layui.form
-            , $ = layui.jquery
-            , layer = layui.layer
-            , layedit = layui.layedit
-            , laydate = layui.laydate;
+    function fuc(d) {
+        layui.use(['form', 'jquery', 'layedit', 'laydate'], function () {
+            var form = layui.form
+                , $ = layui.jquery
+                , layer = layui.layer
+                , layedit = layui.layedit
+                , laydate = layui.laydate;
 
-        $.ajax({
-            url: "http://127.0.0.1:8082/user/checking.do",
-            type: "post",
-            dataType: "json",
-            success: function (rec) {
-                if (rec.code !== 0) {
-                    layer.msg("非管理员无权访问用户注册页面,请联系管理员", {icon: 5, time: 1500}, function () {
-                        window.location.href = "/html/welcome.html?t=1";
-                    })
-                } else {
-                    init();
-                }
-            }
-        });
+            // $.ajax({
+            //     url: "http://127.0.0.1:8082/user/checking.do",
+            //     type: "get",
+            //     dataType: "json",
+            //     success: function (rec) {
+            //         if (rec.code !== 0) {
+            //             layer.msg("非管理员无权访问用户注册页面,请联系管理员", {icon: 5, time: 1500}, function () {
+            //                 window.location.href = "/html/user/userIndex.html"
+            //             })
+            //         }
+            //     }
+            // });
 
+            // $.ajax({
+            //     url: "http://127.0.0.1:8082/role/findAllRole.do",
+            //     type: "post",
+            //     dataType: "json",
+            //     data: {page: -1, limit: -1},
+            //     success: function (rec) {
+            //         if (rec.code !== 0) {
+            //             layer.msg("初始化数据失败", {icon: 5, time: 1500})
+            //         } else {
+            //             $('#roleId').empty();
+            //             $('#roleId').append(new Option("请选择角色", ""));
+            //             $.each(rec.data, function (index, item) {
+            //                 $('#roleId').append(new Option(item.roleName, item.id));// 下拉菜单里添加元素
+            //             });
+            //             form.render("select");
+            //         }
+            //     }
+            // });
 
-        function init() {
-
-            $.ajax({
-                url: "http://127.0.0.1:8082/role/findAllRole.do",
-                type: "post",
-                dataType: "json",
-                data: {page: -1, limit: -1},
-                success: function (rec) {
-                    if (rec.code !== 0) {
-                        layer.msg("初始化数据失败", {icon: 5, time: 1500})
-                    } else {
-                        $('#roleId').empty();
-                        $('#roleId').append(new Option("请选择角色", ""));
-                        $.each(rec.data, function (index, item) {
-                            $('#roleId').append(new Option(item.roleName, item.id));// 下拉菜单里添加元素
-                        });
-                        form.render("select");
-                    }
-                }
-            });
-
-            $.ajax({
-                url: "http://127.0.0.1:8082/user/findRefer.do",
-                type: "post",
-                dataType: "json",
-                success: function (rec) {
-                    if (rec.code !== 0) {
-                        $('#refer').append(new Option("暂无数据", ""));// 下拉菜单里添加元素
-                    } else {
-                        $('#refer').empty();
-                        $('#refer').append(new Option("请选择推荐人", ""));
-                        $.each(rec.data, function (index, item) {
-                            $('#refer').append(new Option(item.username, item.id));// 下拉菜单里添加元素
-                        });
-                        form.render("select");
-                    }
-                }
-            });
+            // $.ajax({
+            //     url: "http://127.0.0.1:8082/user/findRefer.do",
+            //     type: "post",
+            //     dataType: "json",
+            //     success: function (rec) {
+            //         if (rec.code !== 0) {
+            //             $('#refer').append(new Option("暂无数据", ""));// 下拉菜单里添加元素
+            //         } else {
+            //             $('#refer').empty();
+            //             $('#refer').append(new Option("请选择推荐人", ""));
+            //             $.each(rec.data, function (index, item) {
+            //                 $('#refer').append(new Option(item.username, item.id));// 下拉菜单里添加元素
+            //             });
+            //             form.render("select");
+            //         }
+            //     }
+            // });
 
             $.ajax({
                 url: "http://127.0.0.1:8082/user/findAllDictionary.do",
@@ -275,25 +252,56 @@
                         $('#cardTypeName').empty();
                         $('#cardTypeName').append(new Option("请选择证件类型", ""));
                         $.each(rec.data, function (index, item) {
-                            $('#cardTypeName').append(new Option(item.valueName, item.valueName));// 下拉菜单里添加元素
+                            $('#cardTypeName').append(new Option(item.valueName, item.valueName, null, item.valueName === d.cardTypeName));// 下拉菜单里添加元素
                         });
                         form.render("select");
                     }
                 }
             });
+
+            //给表单赋值
+            form.val("numb_edit", { //formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+                "mobile": d.mobile // "name": "value"
+                , "password": d.password  //password
+                , "username": d.username
+                , "realName": d.realName
+                , "email": d.email
+                , "postCode": d.postCode
+                , "country": d.country   //country
+                , "password2": d.password2
+                , "bankName": d.bankName
+                , "accountHolder": d.accountHolder
+                , "bankAccount": d.bankAccount
+                , "userAddress": d.userAddress
+                , "idCard": d.idCard
+                , "id": d.id
+            });
+
+
             //监听提交
             form.on('submit(demo1)', function (data) {
+
+                console.log("1231231231233" + $("#passwordAgain").val() === "");
+
+
+                if ($("#password").val() !== $("#passwordAgain").val() && $("#passwordAgain").val() !== "") {
+                    layer.msg("两次一级密码不相等", {icon: 5, time: 1000});
+                    return false;
+                }
                 $.ajax({
-                    url: "http://127.0.0.1:8082/user/register.do",
-                    type: "get",
-                    data: form.val("register"),
+                    url: "http://127.0.0.1:8082/user/updateUser.do",
+                    type: "post",
+                    data: form.val("numb_edit"),
                     dataType: "json",
                     success: function (rec) {
                         if (rec.code === 0) {
-                            layer.msg("注册成功", {icon: 6, time: 1000});
+                            layer.msg("修改成功", {icon: 6, time: 1000}, function () {
+                                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                parent.layer.close(index);
+                            });
                             return false;
                         } else {
-                            layer.msg("注册失败", {icon: 5, time: 1000});
+                            layer.msg("修改失败", {icon: 5, time: 1000});
                             return false;
                         }
                     }
@@ -301,9 +309,8 @@
                 alert(111);
                 return false;
             });
-        }
-
-    });
+        });
+    }
 </script>
 
 </body>

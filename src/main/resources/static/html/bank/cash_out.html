@@ -90,43 +90,23 @@
         form.on('submit(setting)', function (data) {
             var money = $("input[name='money']").val();
 
-
             $.ajax({
-                url: "/bank/findList.do",
-                type: "get",
-                dataType: "json",
-                async: false,
+                url:"/bank/addOut.do",
                 data:{
-                    page:0,
-                    limit:0,
+                    moneyOut:money,
+                    balance:money,
                 },
-                success: function (r) {
-                    var data = r.data;
-                    if(money>data[0].balance){
-                        alert("提现金额不能大于余额")
+                type:"get",
+                dataType:"json",
+                async:false,
+                success:function (rec) {
+                    if(rec.code==0){
+                        alert("汇款成功")
                     }else {
-                        $.ajax({
-                            url:"/bank/addOut.do",
-                            data:{
-                                moneyOut:money,
-                                balance:money,
-                            },
-                            type:"get",
-                            dataType:"json",
-                            async:false,
-                            success:function (rec) {
-                                if(rec.code==0){
-                                    alert("汇款成功")
-                                }else {
-                                    alert("汇款失败")
-                                }
-                            },
-                        })
+                        alert("汇款失败")
                     }
-
-                }
+                },
             })
-
         });
 
 
@@ -134,10 +114,6 @@
             url:"/bank/findList.do",
             type:"get",
             dataType:"json",
-            data:{
-                page:0,
-                limit:0,
-            },
             success:function (r) {
                 var data = r.data;
                 $("#balance").html(data[0].balance)

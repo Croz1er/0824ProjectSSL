@@ -16,14 +16,11 @@ public interface BankMapper {
     @Update(value = "update user_account set balance= (balance + #{balance}) , lastUpdateTime=#{lastUpdateTime} where userId =#{userId}")
     int updateAddMoney(User_account user_account);
 
-    @Insert(value = "insert into account_detail (accountId,accountDate,moneyIn,moneyOut,type,credit) values(#{accountId},#{accountDate},#{moneyIn},0,0,#{credit})")
-    int insertMoney(Account_detail account_detail);
-
     //基本账户
     @Select(value = "<script>select * from account_detail left join user_account on  user_account.id  = accountId" +
             "<where>" +
-            "<if test=\"staDate !=null and endDate != null\" >" +
-            "accountDate  &gt; #{staDate} and accountDate &lt; #{endDate} and" +
+            "<if test=\"accountDate !=null\" >" +
+            "accountDate  &gt; #{accountDate} and accountDate &lt; #{accountDate1} and" +
             "</if>" +
             " <if test=\"userId!=null and userId !='' \">user_account.userId=#{userId}</if>" +
             "</where></script>")
@@ -38,7 +35,7 @@ public interface BankMapper {
 //    List<Account_detail> selectAll(Account_detail account_detail);
 
     //提现
-    @Insert(value = "insert into account_detail (accountId,accountDate,moneyOut,type,otherAcountId,moneyIn,credit) values (#{accountId},#{accountDate},#{moneyOut},1,#{otherAcountId},0,#{credit})")
+    @Insert(value = "insert into account_detail (accountId,accountDate,moneyOut,type,otherAcountId,moneyIn) values (#{accountId},#{accountDate},#{moneyOut},1,#{otherAcountId},0)")
     int insertOut(Account_detail account_detail);
 
     @Update(value = "update user_account set balance= (balance - #{balance}) where userId =#{userId}")
@@ -47,8 +44,8 @@ public interface BankMapper {
     //提现明细
     @Select(value = "<script>select * from account_detail left join user_account on  user_account.id  = accountId" +
             "<where>" +
-            "<if test=\"staDate !=null and endDate !=null\" >" +
-            "accountDate  &gt; #{staDate} and accountDate &lt; #{endDate} and" +
+            "<if test=\"accountDate !=null\" >" +
+            "accountDate  &gt; #{accountDate} and accountDate &lt; #{accountDate1} and" +
             "</if>" +
             " <if test=\"userId!=null and userId !='' \">user_account.userId=#{userId}</if>" +
             "</where></script>")
@@ -65,11 +62,6 @@ public interface BankMapper {
     @Select(value = "select * from au_user where username =#{username}")
     User selectByUsername(User user);
 
-//    @Insert(value = "insert into account_detail (accountId,accountDate,moneyOut,type,otherAcountId,moneyIn) values (#{accountId},#{accountDate},#{moneyOut},1,#{otherAcountId},0)")
-//    int insertGo(Account_detail account_detail);
-
-    @Insert(value = "insert into account_detail (accountId,accountDate,moneyOut,type,otherAcountId,moneyIn,credit) values (#{accountId},#{accountDate},#{moneyOut},#{type},#{otherAcountId},#{moneyIn},#{credit})")
-    int insertDetail(Account_detail account_detail);
 
 
 }

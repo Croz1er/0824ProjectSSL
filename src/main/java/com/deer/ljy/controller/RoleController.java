@@ -73,6 +73,10 @@ public class RoleController {
     @RequestMapping("/updateRole.do")
     public BaseResult upDateRolles(Role role){
         BaseResult result = new BaseResult();
+        System.out.println(role);
+        if (role.getIsStart()==null){
+            role.setIsStart(0);
+        }
         int i = roleService.updateRoleById(role);
         if (i>0){
             result.setCode(0);

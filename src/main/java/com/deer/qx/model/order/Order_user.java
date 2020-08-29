@@ -17,7 +17,6 @@ public class Order_user implements Serializable {
     private String createBy;
     private Date createDateTime;
 
-
     public Integer getId() {
         return id;
     }

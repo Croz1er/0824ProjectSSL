@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="/lib/layui-v2.5.5/css/layui.css"  media="all">
+
+</head>
+<body>
+
+
+<!--<div class="layuimini-container">-->
+<!--    <div class="layuimini-main">-->
+
+
+<!--        <script type="text/html" id="toolbarDemo">-->
+
+<!--        </script>-->
+
+<!--        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>-->
+
+<!--        <script type="text/html" id="currentTableBar">-->
+<!--            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">添加</a>-->
+<!--            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>-->
+<!--        </script>-->
+
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script src="/lib/layui-v2.5.5/layui.all.js"></script>-->
+
+<!--<script>-->
+<!--    layui.use(['form', 'table'], function () {-->
+<!--        var $ = layui.jquery,-->
+<!--            form = layui.form,-->
+<!--            table = layui.table;-->
+
+<!--        table.render({-->
+<!--            elem: '#currentTableId',-->
+<!--            url: '/goods/list.do',-->
+<!--            toolbar: '#toolbarDemo',-->
+<!--            defaultToolbar: ['filter', 'exports', 'print', {-->
+<!--                title: '提示',-->
+<!--                layEvent: 'LAYTABLE_TIPS',-->
+<!--                icon: 'layui-icon-tips'-->
+<!--            }],-->
+<!--            cols: [[-->
+<!--                {type: "checkbox", width: 50},-->
+<!--                {field: 'id', width: 80, title: 'ID', sort: true,hide:true},-->
+<!--                {field: 'goodsSN', width: 80, title: '商品编码',hide:true},-->
+<!--                {field: 'goodsName', width: 80, title: '商品名称', sort: true},-->
+<!--                {field: 'goodsFormat', width: 80, title: '商品规格'},-->
+<!--                {field: 'marketPrice', title: '市场价', minWidth: 150},-->
+<!--                {field: 'realPrice', width: 80, title: '优惠价格', sort: true},-->
+<!--                {field: 'state', width: 80, title: '状态', sort: true},-->
+<!--                {field: 'note', width: 80, title: '商品说明'},-->
+<!--                {field: 'num', width: 135, title: '库存数量', sort: true},-->
+<!--                {field: 'unit', width: 135, title: '单位', sort: true},-->
+<!--                {field: 'createTime', width: 135, title: '创建时间', sort: true,hide:true},-->
+<!--                {field: 'lastUpdateTime', width: 135, title: '最后更新时间', sort: true,hide:true},-->
+<!--                {field: 'createdBy', width: 135, title: '创建人', sort: true,hide:true},-->
+<!--                {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}-->
+<!--            ]],-->
+<!--            limits: [3, 6, 10, 25, 50, 100],-->
+<!--            limit: 3,-->
+<!--            page: true,-->
+<!--            skin: 'line'-->
+<!--        });-->
+
+<!--        // 监听搜索操作-->
+<!--        form.on('submit(data-search-btn)', function (data) {-->
+<!--            var result = JSON.stringify(data.field);-->
+<!--            layer.alert(result, {-->
+<!--                title: '最终的搜索信息'-->
+<!--            });-->
+
+<!--            //执行搜索重载-->
+<!--            table.reload('currentTableId', {-->
+<!--                page: {-->
+<!--                    curr: 1-->
+<!--                }-->
+<!--                , where: {-->
+<!--                    searchParams: result-->
+<!--                }-->
+<!--            }, 'data');-->
+
+<!--            return false;-->
+<!--        });-->
+
+<!--        /**-->
+<!--         * toolbar监听事件-->
+<!--         */-->
+<!--        table.on('toolbar(currentTableFilter)', function (obj) {-->
+<!--            if (obj.event === 'add') {  // 监听添加操作-->
+<!--                var index = layer.open({-->
+<!--                    title: '添加用户',-->
+<!--                    type: 2,-->
+<!--                    shade: 0.2,-->
+<!--                    maxmin:true,-->
+<!--                    shadeClose: true,-->
+<!--                    area: ['100%', '100%'],-->
+<!--                    content: '/page/table/add.html',-->
+<!--                });-->
+<!--                $(window).on("resize", function () {-->
+<!--                    layer.full(index);-->
+<!--                });-->
+<!--            } else if (obj.event === 'delete') {  // 监听删除操作-->
+<!--                var checkStatus = table.checkStatus('currentTableId')-->
+<!--                    , data = checkStatus.data;-->
+<!--                layer.alert(JSON.stringify(data));-->
+<!--            }-->
+<!--        });-->
+
+<!--        //监听表格复选框选择-->
+<!--        table.on('checkbox(currentTableFilter)', function (obj) {-->
+<!--            console.log(obj)-->
+<!--        });-->
+
+<!--        table.on('tool(currentTableFilter)', function (obj) {-->
+
+<!--            var d = obj.data;-->
+<!--            alert(d)-->
+<!--            console.log(obj)-->
+<!--            console.log(d)-->
+<!--            console.log(d.createTime)-->
+<!--            if (obj.event === 'edit') {-->
+
+<!--                $.ajax({-->
+<!--                    url:"/goods/add.do",-->
+<!--                    data:{-->
+<!--                        marketPrice:d.marketPrice,-->
+<!--                        createdBy:d.createdBy,-->
+<!--                        createTime:d.createTime,-->
+<!--                        lastUpdateTime:d.lastUpdateTime-->
+<!--                    },-->
+<!--                    dataType:"json",-->
+<!--                    type:"get",-->
+
+<!--                })-->
+
+
+<!--                // location.href="/goods/add.do/?marketPrice="+data.marketPrice+"&createdBy="+data.createdBy+"&createTime="+data.createTime+"&lastUpdateTime="+data.lastUpdateTime-->
+
+
+<!--            } else if (obj.event === 'delete') {-->
+
+
+<!--                layer.confirm('真的删除行么', function (index) {-->
+<!--                    obj.del();-->
+<!--                    layer.close(index);-->
+<!--                });-->
+
+
+<!--            }-->
+<!--        });-->
+
+<!--    });-->
+<!--</script>-->
+
+
+
+
+
+<table class="layui-table" lay-data="{ height:330, url:'/goods/list.do', page:true, id:'idTest',limit:3,limits:[5,10,15]}" lay-filter="demo">
+
+    <thead>
+    <tr>
+        <th lay-data="{type:'checkbox', fixed: 'left'}"></th>
+        <th lay-data="{field:'id', width:80, sort: true, fixed: true,hide:true}">ID</th>
+        <th lay-data="{field:'goodsSN', width:80,hide:true}">商品编码</th>
+        <th lay-data="{field:'goodsName', width:80, sort: true}">商品名称</th>
+        <th lay-data="{field:'goodsFormat', width:80}">商品规格</th>
+        <th lay-data="{field:'marketPrice', width:160}">市场价</th>
+        <th lay-data="{field:'realPrice', width:80, sort: true}">优惠价格</th>
+        <th lay-data="{field:'state', width:80}">状态</th>
+        <th lay-data="{field:'note', width:135, sort: true}">商品说明</th>
+        <th lay-data="{field:'num', width:80, sort: true, fixed: 'right'}">库存数量</th>
+        <th lay-data="{field:'unit', width:80, sort: true, fixed: 'right',hide:true}">单位</th>
+        <th lay-data="{field:'createTime', width:80, sort: true, fixed: 'right',hide:true}">创建时间</th>
+        <th lay-data="{field:'lastUpdateTime', width:80, sort: true, fixed: 'right',hide:true}">最后更新时间</th>
+        <th lay-data="{field:'createdBy', width:80, sort: true, fixed: 'right',hide:true}">创建人</th>
+
+        <th lay-data="{field:'fileName', sort: true,hide:true}"></th>
+        <th lay-data="{fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}">操作</th>
+    </tr>
+    </thead>
+</table>
+
+<script src="/lib/layui-v2.5.5/layui.all.js"></script>
+
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit" >编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">下载</a>
+</script>
+
+
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+        var $ = layui.jquery;
+        监听表格复选框选择
+        table.on('checkbox(demo)', function(obj){
+            var data = obj.data.id;
+            var idList = [];
+            idList.push(data)
+            $("#del").on("click", function () {
+                if (idList != '') {
+                    $.ajax({
+                        url: '/word/removeByAll.do',
+                        type: 'post',
+                        dataType: 'json',
+                        data: "sID=" + idList,
+                        success: function (rec) {
+                            if (rec.code === 0) {
+                                layer.msg('删除成功');
+                                table.reload('idTest', {});
+                            } else {
+                                layer.msg('删除失败');
+                            }
+                        },
+                        'error': function () {
+                            layer.msg('系统错误');
+                        }
+                    })
+                } else {
+                    layer.tips('请选择需要删除的行', $('#batchDel'), {
+                        tips: [3, '#5fb878']
+                    })
+                }
+            })
+        });
+
+        //监听工具条
+        table.on('tool(demo)', function(obj){
+            console.log(obj.data)
+            var d = obj.data;
+            console.log(d.createTime)
+            if(obj.event === 'detail'){
+                // layer.msg('ID：'+ data.id + ' 的查看操作');
+            } else if(obj.event === 'del'){
+                //下载
+                window.location.href = "/word/wordDown.do?filename=" + data.fileName;
+            } else if(obj.event === 'edit'){
+                // $.ajax({
+                //     url:"/goods/add.do",
+                //     data:{
+                //         marketPrice:d.marketPrice,
+                //         createdBy:d.createdBy,
+                //         createTime:d.createTime,
+                //         lastUpdateTime:d.lastUpdateTime
+                //     },
+                //     dataType:"json",
+                //     type:"get",
+                // })
+
+                 // location.href="/goods/add.do/?marketPrice="+data.marketPrice+"&createdBy="+data.createdBy+"&createTime="+data.createTime+"&lastUpdateTime="+data.lastUpdateTime
+            }
+        });
+
+
+
+        //工具栏事件
+        table.on('toolbar(test)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'getCheckData':
+                    var data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：'+ data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选': '未全选')
+                    break;
+            };
+        });
+
+
+    });
+
+</script>
+
+
+</body>
+</html>

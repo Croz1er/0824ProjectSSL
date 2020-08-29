@@ -39,7 +39,7 @@
 
         <script type="text/html" id="barDemo">
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-            <a id="deleteButton" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">锁定|解锁</a>
+            <a id="deleteButton" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
         </script>
 
     </div>
@@ -48,11 +48,11 @@
 <script src="/lib/layui/layui.js" charset="utf-8"></script>
 <script>
 
-
     layui.use(['jquery', 'form', 'table'], function () {
         var $ = layui.jquery,
             form = layui.form,
             table = layui.table;
+
         $.ajax({
             url: "http://127.0.0.1:8082/user/checking.do",
             type: "post",
@@ -71,7 +71,7 @@
         function init() {
             let userTable = table.render({
                 elem: '#currentTableId',
-                url: 'http://127.0.0.1:8082/user/findAll.do?level=1',
+                url: 'http://127.0.0.1:8082/user/findAll.do?level=2',
                 defaultToolbar: ['filter', 'exports', 'print', {
                     title: '提示',
                     layEvent: 'LAYTABLE_TIPS',
@@ -86,11 +86,6 @@
                         field: 'createTime',
                         title: '创建时间',
                         templet: "<div>{{layui.util.toDateString(d.createTime, 'yyyy-MM-dd HH:mm:ss')}}</div>"
-                    },
-                    {
-                        field: 'isStart', title: '是否启用', templet: function (res) {
-                            return res.isStart === 1 ? "√" : "×";
-                        }
                     },
                     {
                         field: 'lastUpdateTime',
@@ -134,7 +129,7 @@
                         shade: 0.2,
                         maxmin: true,
                         shadeClose: true,
-                        area: ['600px', '800px'],
+                        area: ['100%', '100%'],
                         content: '/html/user/register_edit.html',
                         success: function (layero, index) {
                             var iframe = window['layui-layer-iframe' + index];//拿到iframe元素
@@ -143,28 +138,28 @@
                         end: function () {
                             userTable.reload();
                         }
-
                     });
                     $(window).on("resize", function () {
                         layer.full(index);
                     });
                     return false;
                 } else if (obj.event === 'delete') {
-
-                    layer.confirm('确定对该正式会员进行(锁定|解锁)吗?', function (index) {
-
+                    if (data.roleName !== "注册会员") {
+                        layer.msg("非注册会员无法被删除", {icon: 5});
+                        return false;
+                    }
+                    layer.confirm('确定删除?', function (index) {
                         $.ajax({
-                            url: "http://127.0.0.1:8082/user/getStsuts.do",
+                            url: "http://127.0.0.1:8082/user/deleteUser.do",
                             type: "get",
-                            data: {username: data.username},
+                            data: {id: data.id},
                             dataType: "json",
                             success: function (rec) {
                                 if (rec.code === 0) {
-                                    layer.msg("修改成功", {icon: 6, time: 1000}, function () {
-                                        userTable.reload();
-                                    })
+                                    obj.del();
+                                    layer.msg("删除成功", {icon: 6})
                                 } else {
-                                    alert("修改失败", {icon: 5});
+                                    layer.msg("删除失败", {icon: 5});
                                 }
                             }
                         })
@@ -172,8 +167,8 @@
                 }
             });
         }
-    });
 
+    });
 </script>
 
 </body>

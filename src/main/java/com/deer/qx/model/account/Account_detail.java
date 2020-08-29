@@ -17,6 +17,15 @@ public class Account_detail implements Serializable {
     @Transient
     @DateTimeFormat(pattern ="yyyy-MM-dd")
     private Date accountDate1;
+
+    public Date getAccountDate1() {
+        return accountDate1;
+    }
+
+    public void setAccountDate1(Date accountDate1) {
+        this.accountDate1 = accountDate1;
+    }
+
     //入账
     private Double moneyIn;
     //出账
@@ -27,29 +36,7 @@ public class Account_detail implements Serializable {
     private String otherAcountId;
     @Transient
     private  Double balance;
-    @DateTimeFormat(pattern ="yyyy-MM-dd")
-    private Date staDate;
-    @DateTimeFormat(pattern ="yyyy-MM-dd")
-    private Date endDate;
-    @Transient
-    private Integer userId;
-    private Double credit;
 
-    public Double getCredit() {
-        return credit;
-    }
-
-    public void setCredit(Double credit) {
-        this.credit = credit;
-    }
-
-    public Date getAccountDate1() {
-        return accountDate1;
-    }
-
-    public void setAccountDate1(Date accountDate1) {
-        this.accountDate1 = accountDate1;
-    }
     public Double getBalance() {
         return balance;
     }
@@ -57,6 +44,9 @@ public class Account_detail implements Serializable {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
+
+    @Transient
+    private Integer userId;
 
     public Integer getUserId() {
         return userId;
@@ -120,21 +110,5 @@ public class Account_detail implements Serializable {
 
     public void setOtherAcountId(String otherAcountId) {
         this.otherAcountId = otherAcountId;
-    }
-
-    public Date getStaDate() {
-        return staDate;
-    }
-
-    public void setStaDate(Date staDate) {
-        this.staDate = staDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
     }
 }

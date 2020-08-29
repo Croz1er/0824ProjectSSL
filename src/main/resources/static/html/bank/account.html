@@ -9,41 +9,27 @@
     <link rel="stylesheet" href="/lib/layui-v2.5.5/css/layui.css" media="all">
     <link rel="stylesheet" href="/css/public.css" media="all">
 
-    <style>
-        .layui-form-label {
-            text-align: start;
-        }
-    </style>
+   <style>
+       .layui-form-label {
+           text-align:start;
+       }
+     </style>
 </head>
 <body>
 <form class="layui-form">
 
 
-    <div class="layui-form-item">
-        <label class="layui-form-label">日期</label>
-        <div class="layui-input-inline">
-            <input type="date" name="date" lay-verify="data" autocomplete="off" class="layui-input" id="date1">
+            <div class="layui-form-item">
+                <label class="layui-form-label">日期</label>
+                <div class="layui-input-inline">
+                    <input type="date" name="date" lay-verify="data" autocomplete="off" class="layui-input" id="date1">
+                </div>
+                <label class="layui-form-label" style="margin-left: 20px">to</label>
+                <div class="layui-input-inline">
+                    <input type="date" name="date" lay-verify="data" autocomplete="off" class="layui-input" id="date2">
+                </div>
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="setting" id="find">查询</button>
         </div>
-
-        <!--                <div class="layui-input-inline">-->
-        <!--                    <input type="text" class="layui-input" name="date1" id="date1" placeholder="yyyy-MM-dd HH:mm:ss">-->
-
-        <!--                </div>-->
-
-        <label class="layui-form-label" style="margin-left: 20px">to</label>
-        <div class="layui-input-inline">
-            <input type="date" name="date" lay-verify="data" autocomplete="off" class="layui-input" id="date2">
-        </div>
-
-
-        <!--                <div class="layui-input-inline">-->
-        <!--                    <input type="text" class="layui-input" name="date1" id="date2" placeholder="yyyy-MM-dd HH:mm:ss">-->
-
-        <!--                </div>-->
-        <button type="submit" class="layui-btn layui-btn-primary" lay-submit
-                lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索
-        </button>
-    </div>
 
 
     <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
@@ -66,22 +52,40 @@
                 icon: 'layui-icon-tips'
             }],
             cols: [[
-                {type: "checkbox",},
-                {field: 'id', title: 'ID', sort: true, hide: true},
-                {
-                    field: 'accountDate',
-                    title: '日期',
-                    templet: "<div>{{layui.util.toDateString(d.accountDate, 'yyyy-MM-dd HH:mm:ss')}}</div>"
-                },
-                {field: 'moneyIn', title: '入账金额', sort: true},
-                {field: 'moneyOut', title: '出账金额'},
-                {field: 'credit', title: '余额', minWidth: 150},
+                {type: "checkbox", width: 50},
+                {field: 'id', width: 80, title: 'ID', sort: true,hide:true},
+                {field: 'accountDate', width: 120, title: '日期'},
+                {field: 'moneyIn', width: 120, title: '入账金额', sort: true},
+                {field: 'moneyOut', width: 120, title: '出账金额'},
+                {field: 'balance', title: '余额',width:120, minWidth: 150},
+                {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
             ]],
             limits: [5, 10, 15, 20, 25, 30],
             limit: 5,
             page: true,
             skin: 'line'
         });
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            var result = JSON.stringify(data.field);
+            layer.alert(result, {
+                title: '最终的搜索信息'
+            });
+
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    searchParams: result
+                }
+            }, 'data');
+
+            return false;
+        });
+
         /**
          * toolbar监听事件
          */
@@ -91,10 +95,10 @@
                     title: '添加用户',
                     type: 2,
                     shade: 0.2,
-                    maxmin: true,
+                    maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '/page/table/add.html'
+                    content: '/page/table/add.html',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -107,6 +111,10 @@
         });
 
         //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            console.log(obj)
+        });
+
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
             if (obj.event === 'edit') {
@@ -115,10 +123,10 @@
                     title: '编辑用户',
                     type: 2,
                     shade: 0.2,
-                    maxmin: true,
+                    maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '/page/table/edit.html'
+                    content: '/page/table/edit.html',
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -131,42 +139,29 @@
                 });
             }
         });
-        // $("#find").on("click",function () {
-        //     var date1 = $("#date1").val();
-        //     var date2 = $("#date2").val();
-        //     $.ajax({
-        //         type:"get",
-        //         async: true,
-        //         url: '/bank/findList.do',
-        //         dataType:"json",
-        //         data:{
-        //             staDate:date1,
-        //             endDate:date2,
-        //             page:1,
-        //             limit:5
-        //         }
-        //     });
-        //     return false;
-        // })
-        form.on('submit(data-search-btn)', function (data) {
+
+
+        $("#find").on("click",function () {
             var date1 = $("#date1").val();
             var date2 = $("#date2").val();
-            // console.log(parse.goodsName);
-            //执行搜索重载
-            table.reload('currentTableId', {
-                where: {
-                    staDate: date1,
-                    endDate: date2,
-                    page: 1,
-                    limit: 5
-                }
-            });
-            return false;
-        });
+            $.ajax({
+                type:"get",
+                async: false,
+                url: '/bank/findList.do',
+                data:{
+                    accountDate:date1,
+                    accountDate1:date2,
+
+
+                },
+
+            })
+
+        })
+
+
 
     });
-
-
 </script>
 </body>
 </html>

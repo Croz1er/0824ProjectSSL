@@ -37,7 +37,7 @@ public class MenuServiceImpl implements MenuService {
         //整合成List<Menu>,这里边的每个func就是单个Menu
         List<Menu> menus = new ArrayList<>();
         int i = 1;
-        for(Func func:funcs){
+        for (Func func : funcs) {
             Menu menu = new Menu();
             int j = 0;
             j = i++;
@@ -52,8 +52,8 @@ public class MenuServiceImpl implements MenuService {
             menu.setUpdateTime(new Date());
             menu.setParentId(func.getParentId());
             //标识出选中的菜单
-            for(Func checkedFunc:funcs2){
-                if(func.getId().intValue()==checkedFunc.getId().intValue()){
+            for (Func checkedFunc : funcs2) {
+                if (func.getId().intValue() == checkedFunc.getId().intValue()) {
                     menu.setChecked(true);
                     break;
                 }
@@ -63,20 +63,23 @@ public class MenuServiceImpl implements MenuService {
         return menus;
 
     }
-    @Transactional(isolation = Isolation.DEFAULT,propagation = Propagation.REQUIRED)
-   @Override
-    public Integer modifyFuncByRole(Integer roleId, Integer[] funcId,String createBy) throws Exception {
+
+    @Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
+    @Override
+    public Integer modifyFuncByRole(Integer roleId, Integer[] funcId, String createBy) throws Exception {
         //1.先根据roleId删除权限
-       int remove = functionService.deleteFuncByRoleId(roleId);
+        int remove = functionService.deleteFuncByRoleId(roleId);
         //2.再根据roleId增加权限
         Integer integer = 0;
-        for (Integer id : funcId) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            String format1 = format.format(new Date());
-            System.out.println(format1);
-            integer += functionService.insertFuncByRoleId(roleId, id, format1,createBy);
-       }
-        return remove+integer;
+        if (funcId != null) {
+            for (Integer id : funcId) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                String format1 = format.format(new Date());
+                System.out.println(format1);
+                integer += functionService.insertFuncByRoleId(roleId, id, format1, createBy);
+            }
+        }
+        return remove + integer;
 //       return null;
     }
 }
