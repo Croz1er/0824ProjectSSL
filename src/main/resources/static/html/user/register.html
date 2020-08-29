@@ -44,7 +44,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">用户名 :</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="username" lay-verify="required" autocomplete="off" class="layui-input">
+                        <input type="tel" name="username" lay-verify="required" autocomplete="off" class="layui-input">
                     </div>
 
                 </div>
@@ -61,7 +61,9 @@
                     <label class="layui-form-label">证件类型:</label>
                     <div class="layui-input-inline">
                         <select name="cardTypeName" id="cardTypeName">
-                            <option value=""></option>
+                            <option value="">--请选择--</option>
+                            <option value="二代身份证">二代身份证</option>
+                            <option value="二代军官证">二代军官证</option>
                         </select>
                     </div>
                     <div class="layui-form-mid layui-word-aux"><span style="color: red">*</span></div>
@@ -157,21 +159,21 @@
                 </div>
             </div>
 
-            <!--            <div class="layui-form-item">-->
-            <!--                <div class="layui-inline">-->
-            <!--                    <label class="layui-form-label">上传身份证图片（正反面） :</label>-->
-            <!--                    <div class="layui-input-inline">-->
-            <!--                        <input type="file" name="idphoto">-->
-            <!--                    </div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <div class="layui-inline">-->
+<!--                    <label class="layui-form-label">上传身份证图片（正反面） :</label>-->
+<!--                    <div class="layui-input-inline">-->
+<!--                        <input type="file" name="idphoto">-->
+<!--                    </div>-->
 
-            <!--                </div>-->
-            <!--                <div class="layui-inline">-->
-            <!--                    <label class="layui-form-label">上传银行卡图片</label>-->
-            <!--                    <div class="layui-input-inline">-->
-            <!--                        <input type="file" name="bankphoto">-->
-            <!--                    </div>-->
-            <!--                </div>-->
-            <!--            </div>-->
+<!--                </div>-->
+<!--                <div class="layui-inline">-->
+<!--                    <label class="layui-form-label">上传银行卡图片</label>-->
+<!--                    <div class="layui-input-inline">-->
+<!--                        <input type="file" name="bankphoto">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
 
 
             <div class="layui-form-item layui-form-text">
@@ -194,13 +196,10 @@
 
     </div>
 </div>
-<script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+
 <script src="/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
-
-
-
     layui.use(['form', 'jquery', 'layedit', 'laydate'], function () {
         var form = layui.form
             , $ = layui.jquery
@@ -210,110 +209,95 @@
 
         $.ajax({
             url: "http://127.0.0.1:8082/user/checking.do",
-            type: "post",
+            type: "get",
             dataType: "json",
             success: function (rec) {
                 if (rec.code !== 0) {
                     layer.msg("非管理员无权访问用户注册页面,请联系管理员", {icon: 5, time: 1500}, function () {
-                        window.location.href = "/html/welcome.html?t=1";
+                        window.location.href = "/html/user/userIndex.html"
                     })
+                }
+            }
+        });
+
+        $.ajax({
+            url: "http://127.0.0.1:8082/role/findAllRole.do",
+            type: "get",
+            dataType: "json",
+            success: function (rec) {
+                if (rec.code !== 0) {
+                    layer.msg("初始化数据失败", {icon: 5, time: 1500})
                 } else {
-                    init();
+                    $('#roleId').empty();
+                    $('#roleId').append(new Option("请选择角色", ""));
+                    $.each(rec.data, function (index, item) {
+                        $('#roleId').append(new Option(item.roleName, item.id));// 下拉菜单里添加元素
+                    });
+                    form.render("select");
+                }
+            }
+        });
+
+        $.ajax({
+            url: "http://127.0.0.1:8082/user/findRefer.do",
+            type: "get",
+            dataType: "json",
+            success: function (rec) {
+                if (rec.code !== 0) {
+                    $('#refer').append(new Option("暂无数据", ""));// 下拉菜单里添加元素
+                } else {
+                    $('#refer').empty();
+                    $('#refer').append(new Option("请选择推荐人", ""));
+                    $.each(rec.data, function (index, item) {
+                        $('#refer').append(new Option(item.username, item.id));// 下拉菜单里添加元素
+                    });
+                    form.render("select");
                 }
             }
         });
 
 
-        function init() {
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        laydate.render({
+            elem: '#date1'
+        });
+
+        //监听提交
+        form.on('submit(demo1)', function (data) {
             $.ajax({
-                url: "http://127.0.0.1:8082/user/checking.do",
+                url: "http://127.0.0.1:8082/user/register.do",
                 type: "get",
+                data: form.val("register"),
                 dataType: "json",
                 success: function (rec) {
-                    if (rec.code !== 0) {
-                        layer.msg("非管理员无权访问用户注册页面,请联系管理员", {icon: 5, time: 1500}, function () {
-                            window.location.href = "/html/user/userIndex.html";
-                        })
-                    }
-                }
-            });
-
-            $.ajax({
-                url: "http://127.0.0.1:8082/role/findAllRole.do",
-                type: "post",
-                dataType: "json",
-                data: {page: -1, limit: -1},
-                success: function (rec) {
-                    if (rec.code !== 0) {
-                        layer.msg("初始化数据失败", {icon: 5, time: 1500})
+                    if (rec.code === 0) {
+                        layer.msg("注册成功", {icon: 6, time: 1000});
+                        return false;
                     } else {
-                        $('#roleId').empty();
-                        $('#roleId').append(new Option("请选择角色", ""));
-                        $.each(rec.data, function (index, item) {
-                            $('#roleId').append(new Option(item.roleName, item.id));// 下拉菜单里添加元素
-                        });
-                        form.render("select");
+                        layer.msg("注册失败", {icon: 5, time: 1000});
+                        return false;
                     }
                 }
             });
+            alert(111);
+            return false;
+        });
 
-            $.ajax({
-                url: "http://127.0.0.1:8082/user/findRefer.do",
-                type: "post",
-                dataType: "json",
-                success: function (rec) {
-                    if (rec.code !== 0) {
-                        $('#refer').append(new Option("暂无数据", ""));// 下拉菜单里添加元素
-                    } else {
-                        $('#refer').empty();
-                        $('#refer').append(new Option("请选择推荐人", ""));
-                        $.each(rec.data, function (index, item) {
-                            $('#refer').append(new Option(item.username, item.id));// 下拉菜单里添加元素
-                        });
-                        form.render("select");
-                    }
-                }
-            });
 
-            $.ajax({
-                url: "http://127.0.0.1:8082/user/findAllDictionary.do",
-                type: "post",
-                dataType: "json",
-                data: {type: "证件类型"},
-                success: function (rec) {
-                    if (rec.code !== 0) {
-                        $('#cardTypeName').append(new Option("暂无数据", ""));// 下拉菜单里添加元素
-                    } else {
-                        $('#cardTypeName').empty();
-                        $('#cardTypeName').append(new Option("请选择证件类型", ""));
-                        $.each(rec.data, function (index, item) {
-                            $('#cardTypeName').append(new Option(item.valueName, item.valueName));// 下拉菜单里添加元素
-                        });
-                        form.render("select");
-                    }
-                }
-            });
-            //监听提交
-            form.on('submit(demo1)', function (data) {
-                $.ajax({
-                    url: "http://127.0.0.1:8082/user/register.do",
-                    type: "get",
-                    data: form.val("register"),
-                    dataType: "json",
-                    success: function (rec) {
-                        if (rec.code === 0) {
-                            layer.msg("注册成功", {icon: 6, time: 1000});
-                            return false;
-                        } else {
-                            layer.msg("注册失败", {icon: 5, time: 1000});
-                            return false;
-                        }
-                    }
-                });
-                alert(111);
-                return false;
-            });
-        }
+        //表单初始赋值
+        form.val('example', {
+            "username": "贤心" // "name": "value"
+            , "password": "123456"
+            , "interest": 1
+            , "like[write]": true //复选框选中状态
+            , "close": true //开关状态
+            , "sex": "女"
+            , "desc": "我爱 layui"
+        })
+
 
     });
 </script>

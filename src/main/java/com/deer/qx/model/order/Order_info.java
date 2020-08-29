@@ -8,7 +8,7 @@ public class Order_info implements Serializable {
 
     private Integer id;
     //订单编号
-    private String orderCode;
+    private Integer orderCode;
     //订单总价
     private Double orderPrice;
     //订单时间
@@ -22,6 +22,10 @@ public class Order_info implements Serializable {
     //关联用户表
     private Integer userId;
 
+    public Integer getOrderCode() {
+        return orderCode;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -30,13 +34,10 @@ public class Order_info implements Serializable {
         this.id = id;
     }
 
-    public String getOrderCode() {
-        return orderCode;
-    }
-
-    public void setOrderCode(String orderCode) {
+    public void setOrderCode(Integer orderCode) {
         this.orderCode = orderCode;
     }
+
 
     public Double getOrderPrice() {
         return orderPrice;

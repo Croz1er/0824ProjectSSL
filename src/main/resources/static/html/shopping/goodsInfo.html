@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<!--    <script src="/js/layui/layui.all.js" charset="utf-8"></script>-->
+    <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="/lib/layui/css/layui.css">
+
+</head>
+<div id="changeForm" style="margin: 0 auto;display: flex;height: 38px; width: 850px">
+
+
+</div>
+
+
+
+
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">商品名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="goodsName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary" lay-submit
+                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+
+        <table id="demo" lay-filter="test"></table>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/lib/getUrl.js"></script>
+<script src="/lib/layui/layui.js"></script>
+<script>
+    layui.use(['form','table'],function () {
+            var table=layui.table;
+            var form = layui.form;
+
+            var userTable=table.render({
+                elem: '#demo'
+                , height: 'full'
+                , url: '/goods/list.do' //数据接口
+                , even: true
+                , page: true //开启分页
+                , limit: 5
+                , limits: [5, 10, 15, 20]
+                , cols: [[ //表头
+                    {type: 'checkbox', fixed: 'left'},
+                    {field: 'id', hide: true}
+                    , {field: 'goodsSN', title: '商品编码', align: 'center'}
+                    , {field: 'goodsName', title: '商品名称', align: 'center'}
+                    , {field: 'goodsFormat',   title: '商品规格',align: 'center',hide:true}
+                    , {field: 'marketPrice',   title: '市场价',align: 'center'}
+                    , {field: 'realPrice',   title: '优惠价格',align: 'center'}
+                    , {field: 'note',   title: '商品说明',align: 'center'}
+                    , {field: 'num',   title: '库存数量',align: 'center'}
+                    , {field: 'state',   title: '状态',align: 'center',templet:function (rec) {
+                            return rec.state===1?"上架":"下架"
+                        }}
+                    ,{field: 'lastUpdateTime',title: '更新时间',align: 'center',templet : "<div>{{layui.util.toDateString(d.lastUpdateTime, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
+                    , {title: '操作', align: 'center', toolbar: '#barDemo'}
+                ]] //这里的toolbar值是模板元素的选择器
+            });
+
+        // $("#qy").on("click",function () {
+        //     var goodsName=$("#selectTitle").val()
+        //
+        //     $.ajax({
+        //         url:"/goods/findVague.do",
+        //         dataType:"json",
+        //         type:"post",
+        //         data:{
+        //             goodsName:goodsName
+        //         },
+        //     })
+        //
+        //     userTable.reload()
+        // });
+
+
+
+        form.on('submit(data-search-btn)', function (data) {
+            var result = JSON.stringify(data.field);
+            var parse = JSON.parse(result);
+            console.log(parse.goodsName);
+            //执行搜索重载
+            table.reload('demo', {
+                where: {
+                    goodsName: parse.goodsName
+                }
+            });
+            return false;
+        });
+
+
+
+
+        $("#insert").on("click",function () {
+            location.href="/html/shopping/insertGoods.html"
+        })
+
+
+
+
+        $("#del").on("click",function () {
+            var checkStatus =table.checkStatus("demo");
+            var data=checkStatus.data;
+            var ids=[];
+            data.forEach(function (u,i) {
+                ids.push(u.id);
+            });
+            if (ids.length==0){
+                layer.msg("请选择要删除的行")
+                return false;
+            }
+            layer.confirm("确认删除吗", function (index) {
+                $.ajax({
+                    url: "/goods/delOne.do",
+                    data: {"isid": ids},
+                    type: "get",
+                    traditional: true,
+                    dataType: "json",
+                    success: function (rec) {
+                        if (rec.code == 0) {
+                            layer.msg('删除成功');
+                            userTable.reload({
+                                page: {curr: 1}
+                            });
+                        } else {
+                            layer.msg('删除失败');
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+        });
+
+
+        //监听行工具事件
+        table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            console.log(obj)
+            var data = obj.data //获得当前行数据
+                , layEvent = obj.event; //获得 lay-event 对应的值
+            if (layEvent === 'detail') {
+                var id=data.id
+                //layer.msg('查看操作');
+                layer.open({
+                    title: '商品信息'
+                    ,area:['200px','300px']
+                    ,content:
+
+                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">商品名:'+ data.goodsName +'</p>' +
+                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">商品规格:'+ data.goodsFormat +'</p>' +
+                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">市场价:'+ data.marketPrice + '</p>' +
+                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">优惠价格:'+ data.realPrice +'</p>' +
+                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">库存数量:'+ data.num + '</p>' +
+                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">商品说明:'+ data.note + '</p>'
+                });
+
+                console.log(data.id)
+
+            } else if (layEvent === 'add') {
+                layer.confirm('是否添加购物车', function (index) {
+                    var data = obj.data;
+
+                    $.ajax({
+                        url:"/goods/findNum.do",
+                        type:"post",
+                        dataType:"json",
+                        async: false,
+                        data:{
+                            id:data.id,
+                        },
+                        success:function (r) {
+                            var data1 = r.data;
+                            if(r.data.num<=0){
+                                alert("库存没有了")
+                                $.ajax({
+                                    url:"/goods/updateState.do",
+                                    type:"post",
+                                    dataType:"json",
+                                    async: false,
+                                    data:{
+                                        id:data.id,
+                                    },
+                                    success:function () {
+                                        userTable.reload();
+                                    }
+                                })
+                            }else {
+                                $.ajax({
+                                    url:"/goods/addCar.do",
+                                    type:"post",
+                                    dataType:"json",
+                                    data:{
+                                        goodsId:data.id,
+                                        goodsName:data.goodsName,
+                                        goodsPrice:data.realPrice,
+                                        goodsNum:1,
+                                    },
+                                    success:function (rec) {
+                                        if(rec.code==0){
+                                            userTable.reload();
+                                        }
+                                        else {
+                                            alert("添加失败")
+                                        }
+                                    }
+                                })
+
+                            }
+                        }
+                    })
+                    layer.close(index);
+
+                });
+            } else if (layEvent === 'edit') {
+               location.href="/html/shopping/updateGoods.html?id="+data.id+"&goodsSN="+data.goodsSN+"&goodsName="+data.goodsName+"&goodsFormat="+data.goodsFormat+
+                   "&marketPrice="+data.marketPrice+"&realPrice="+data.realPrice+
+                   "&note="+data.note+"&num="+data.num+"&state="+data.state+"&lastUpdateTime="+data.lastUpdateTime
+            }
+        });
+
+            })
+
+</script>
+<script type="text/html" id="barDemo">
+    <a id="query" class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+    <a id="add" class="layui-btn layui-btn-xs" lay-event="add">购物车</a>
+</script>
+</body>
+</html>

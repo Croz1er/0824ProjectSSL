@@ -6,7 +6,7 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="/lib/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/lib/layui-v2.5.5/css/layui.css" media="all">
     <link rel="stylesheet" href="/css/public.css" media="all">
 </head>
 <body>
@@ -34,146 +34,140 @@
             </div>
         </fieldset>
 
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加</button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除</button>
+            </div>
+        </script>
 
         <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+
         <script type="text/html" id="barDemo">
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-            <a id="deleteButton" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">锁定|解锁</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
 
     </div>
 </div>
-<script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
-<script src="/lib/layui/layui.js" charset="utf-8"></script>
+<script src="/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script>
-
-
     layui.use(['jquery', 'form', 'table'], function () {
         var $ = layui.jquery,
             form = layui.form,
             table = layui.table;
-        $.ajax({
-            url: "http://127.0.0.1:8082/user/checking.do",
-            type: "post",
-            dataType: "json",
-            success: function (rec) {
-                if (rec.code !== 0) {
-                    layer.msg("非管理员无权访问查询页面,请联系管理员", {icon: 5, time: 1500}, function () {
-                        window.location.href = "/html/welcome.html?t=1";
-                    })
-                } else {
-                    init();
+
+        table.render({
+            elem: '#currentTableId',
+            url: 'http://127.0.0.1:8082/user/findAll.do',
+            toolbar: '#toolbarDemo',
+            defaultToolbar: ['filter', 'exports', 'print', {
+                title: '提示',
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
+            }],
+            cols: [[
+                {type: "checkbox", width: 50},
+                {field: 'id', title: 'ID'},
+                {field: 'id', title: 'ID'},
+                {field: 'username', title: '用户名'},
+                {field: 'roleName', title: '会员类型'},
+                {field: 'referCode', title: '推荐人姓名'},
+                {field: 'createTime', title: '创建时间'},
+                {
+                    field: 'isStart', title: '是否启用', templet: function (res) {
+                        return res.isStart === 1 ? "√" : "×";
+                    }
+                },
+                {field: 'lastUpdateTime', title: '最后修改时间'},
+                {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150}
+            ]],
+            limits: [5, 10, 15, 20, 25, 50, 100],
+            limit: 5,
+            page: true,
+            skin: 'line'
+        });
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            var result = JSON.stringify(data.field);
+            let s = result.toString();
+            console.log(result.split(":"));
+            console.log(s);
+            //执行搜索重载
+
+            table.reload('currentTableId', {
+                where:{
+                    username:"ad",
+                    page:0,
+                    limit:5
                 }
+            });
+
+            return false;
+        });
+
+
+
+        /**
+         * toolbar监听事件
+         */
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                var index = layer.open({
+                    title: '添加用户',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: '../page/table/add.html',
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            } else if (obj.event === 'delete') {  // 监听删除操作
+                var checkStatus = realMember.checkStatus('currentTableId')
+                    , data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
             }
         });
 
-        function init() {
-            let userTable = table.render({
-                elem: '#currentTableId',
-                url: 'http://127.0.0.1:8082/user/findAll.do?level=1',
-                defaultToolbar: ['filter', 'exports', 'print', {
-                    title: '提示',
-                    layEvent: 'LAYTABLE_TIPS',
-                    icon: 'layui-icon-tips'
-                }],
-                cols: [[
-                    {field: 'id', title: 'ID'},
-                    {field: 'username', title: '用户名'},
-                    {field: 'roleName', title: '会员类型'},
-                    {field: 'referCode', title: '推荐人姓名'},
-                    {
-                        field: 'createTime',
-                        title: '创建时间',
-                        templet: "<div>{{layui.util.toDateString(d.createTime, 'yyyy-MM-dd HH:mm:ss')}}</div>"
-                    },
-                    {
-                        field: 'isStart', title: '是否启用', templet: function (res) {
-                            return res.isStart === 1 ? "√" : "×";
-                        }
-                    },
-                    {
-                        field: 'lastUpdateTime',
-                        title: '最后修改时间',
-                        templet: "<div>{{layui.util.toDateString(d.lastUpdateTime, 'yyyy-MM-dd HH:mm:ss')}}</div>"
-                    },
-                    {
-                        fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150
-                    }
-                ]],
-                limits: [5, 10, 15, 20, 25, 50, 100],
-                limit: 5,
-                page: true,
-                skin: 'line'
-            });
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            console.log(obj)
+        });
 
-            // 监听搜索操作
-            form.on('submit(data-search-btn)', function (data) {
-                var result = JSON.stringify(data.field);
-                let parse = JSON.parse(result);
-                console.log("4" + parse.username);
-                //执行搜索重载
-                table.reload('currentTableId', {
-                    where: {
-                        username: parse.username
-                    }
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+
+                var index = layer.open({
+                    title: '编辑用户',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: '../page/table/edit.html',
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
                 });
                 return false;
-            });
-            /**
-             * toolbar监听事件
-             */
-            table.on('tool(currentTableFilter)', function (obj) {
-                var data = obj.data;
-                console.log(obj);
-                console.log(data);
-                if (obj.event === 'edit') {
-                    var index = layer.open({
-                        title: '编辑用户',
-                        type: 2,
-                        shade: 0.2,
-                        maxmin: true,
-                        shadeClose: true,
-                        area: ['600px', '800px'],
-                        content: '/html/user/register_edit.html',
-                        success: function (layero, index) {
-                            var iframe = window['layui-layer-iframe' + index];//拿到iframe元素
-                            iframe.child(data)//向此iframe层方法 传递参数
-                        },
-                        end: function () {
-                            userTable.reload();
-                        }
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            }
+        });
 
-                    });
-                    $(window).on("resize", function () {
-                        layer.full(index);
-                    });
-                    return false;
-                } else if (obj.event === 'delete') {
-
-                    layer.confirm('确定对该正式会员进行(锁定|解锁)吗?', function (index) {
-
-                        $.ajax({
-                            url: "http://127.0.0.1:8082/user/getStsuts.do",
-                            type: "get",
-                            data: {username: data.username},
-                            dataType: "json",
-                            success: function (rec) {
-                                if (rec.code === 0) {
-                                    layer.msg("修改成功", {icon: 6, time: 1000}, function () {
-                                        userTable.reload();
-                                    })
-                                } else {
-                                    alert("修改失败", {icon: 5});
-                                }
-                            }
-                        })
-                    });
-                }
-            });
-        }
     });
-
 </script>
 
 </body>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/public.css" media="all">
+</head>
+<body>
+
+<input type="text" name="rolename" hidden>
+<input type="text" name="username" hidden>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <button class="layui-btn memberMessage">会员留言</button>
+        <button class="layui-btn adminMessage">管理员留言</button>
+    </div>
+</div>
+
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="memberAdd" > 留言 </button>
+            </div>
+        </script>
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+    </div>
+</div>
+
+
+<script type="text/html" id="barDemo">
+    <input type="button" class="layui-btn layui-btn-xs" lay-event="edit" value="回复">
+    <input type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" value="删除">
+</script>
+
+</body>
+
+<script src="/lib/layui/layui.js" ></script>
+<script>
+    layui.use(['form', 'table','jquery'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+
+        $.ajax({
+            url:"/user/sessionUser.do"
+            ,dataType:"json"
+            ,type:"post"
+            ,success:function (rec) {
+                if (rec.code==0){
+                    $("input[name=rolename]").val(rec.data.roleName);
+                    $("input[name=username]").val(rec.data.username);
+                }
+            }
+        });
+
+        $(document).on("click",".memberMessage",function () {
+            var rolename=$("input[name=rolename]").val();
+                if (rolename !="管理员"){
+                    table.render({
+                        elem: '#currentTableId',
+                        url: '/leaveMessage/findByName.do',
+                        toolbar: '#toolbarDemo',
+                        defaultToolbar: ['filter', 'exports', 'print', {
+                            title: '提示',
+                            layEvent: 'LAYTABLE_TIPS',
+                            icon: 'layui-icon-tips'
+                        }]
+                        , request: {
+                            pageName: 'pageNow' //页码的参数名称，默认：page
+                            ,
+                            limitName: 'pageSize' //每页数据量的参数名，默认：limit
+                        },
+                        cols: [[
+                            {type: "checkbox", width: 100},
+                            {field: 'id', title: 'ID', hide: true},
+                            {field: 'createdBy', width: 150, title: '留言人', sort: true},
+                            {field: 'messageCode', width: 150, title: '留言编号'},
+                            {field: 'messageTitle', width:150, title: '留言标题', sort: true},
+                            {field: 'messageContent', width: 150, title: '留言内容'},
+                            {field: 'createTime', width: 150, title: '留言时间',templet : "<div>{{layui.util.toDateString(d.createTime, 'yyyy-MM-dd HH:mm:ss')}}</div>"},
+                            {field: 'state', title: '回复状态', minWidth: 150,templet:function (rec) {
+                                    return rec.state===1?"已回复":"未回复";
+                                }}
+                        ]],
+                        limits: [1, 2, 3, 4, 5, 6],
+                        limit: 5,
+                        page: true,
+                        skin: 'line'
+                    });
+                }else {
+                   layer.msg("会员才可以操作")
+                }
+
+        });
+
+        $(document).on("click",".adminMessage",function () {
+            var rolename=$("input[name=rolename]").val();
+            if (rolename=="管理员"){
+                table.render({
+                    elem: '#currentTableId',
+                    url: '/leaveMessage/findAll.do',
+                    defaultToolbar: ['filter', 'exports', 'print', {
+                        title: '提示',
+                        layEvent: 'LAYTABLE_TIPS',
+                        icon: 'layui-icon-tips'
+                    }]
+                    , request: {
+                        pageName: 'pageNow' //页码的参数名称，默认：page
+                        ,
+                        limitName: 'pageSize' //每页数据量的参数名，默认：limit
+                    },
+                    cols: [[
+                        {type: "checkbox", width: 100},
+                        {field: 'id', title: 'ID', hide: true},
+                        {field: 'createdBy', width: 150, title: '留言人', sort: true},
+                        {field: 'messageCode', width: 150, title: '留言编号'},
+                        {field: 'messageTitle', width: 150, title: '留言标题', sort: true},
+                        {field: 'messageContent', width: 150, title: '留言内容'},
+                        {field: 'createTime', width: 150, title: '留言时间',templet : "<div>{{layui.util.toDateString(d.createTime, 'yyyy-MM-dd HH:mm:ss')}}</div>"},
+                        {field: 'state', title: '回复状态', minWidth: 150,templet:function (rec) {
+                                return rec.state===1?"已回复":"未回复";
+                            }
+                        },
+                        {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150}
+                    ]],
+                    limits: [1, 2, 3, 4, 5, 6],
+                    limit: 5,
+                    page: true,
+                    skin: 'line'
+                });
+            }else {
+                layer.msg("您不是管理员。。。")
+            }
+
+        });
+
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            var data=obj.data;
+            var rolenmae=$("input[name=rolenmae]").val();
+            if (obj.event === 'memberAdd') {// 监听添加操作
+                var index = layer.open({
+                    type: 1
+                    , title: "添加留言" //不显示标题栏
+                    , closeBtn: false
+                    , area: '[800px,700px]'
+                    , shade: 0.8
+                    , id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                    , btn: ['添加', '取消']
+                    , btnAlign: 'c'
+                    , moveType: 1 //拖拽模式，0或者1
+                    , content:
+                        '<from class="layui-form layuimini-form">\n' +
+                        '    <div class="layui-form-item">\n' +
+                        '    <label class="layui-form-label required">编号</label>\n' +
+                        '    <div class="layui-input-block">\n' +
+                        '        <input type="text" name="messagecode" lay-verify="required" lay-reqtext="不能为空" placeholder="请输入角色编号" value="" class="layui-input">\n' +
+                        '    </div>\n' +
+                        '</div>\n' +
+                        '    <div class="layui-form-item">\n' +
+                        '        <label class="layui-form-label required">标题</label>\n' +
+                        '        <div class="layui-input-block">\n' +
+                        '            <input type="text" name="messagetitle" lay-verify="required" lay-reqtext="不能为空" placeholder="请输入角色名称" value="" class="layui-input">\n' +
+                        '        </div>\n' +
+                        '    </div>\n' +
+                        '    <div class="layui-form-item">\n' +
+                        '        <label class="layui-form-label required">内容</label>\n' +
+                        '        <div class="layui-input-block">\n' +
+                        '            <input type="text" name="messagecontent" lay-verify="required" lay-reqtext="不能为空" placeholder="请输入角色名称" value="" class="layui-input">\n' +
+                        '        </div>\n' +
+                        '    </div>\n' +
+                        '</from>'
+                    , success: function (layero) {
+
+                    },yes: function (index, layero) {
+                        var messagecode=$("input[name=messagecode]").val();
+                        var messagetitle=$("input[name=messagetitle]").val();
+                        var messagecontent=$("input[name=messagecontent]").val();
+                        if(messagecode==null || messagecode==""){
+                            layer.msg("编号不能为空")
+                        }else if(messagetitle==null || messagetitle==""){
+                            layer.msg("标题不能为空")
+                        }else if (messagecontent==null || messagecontent==""){
+                            layer.msg("内容不能为空")
+                        } else {
+                            $.ajax({
+                                url: "/leaveMessage/save.do"
+                                , dataType: "json"
+                                , type: "get"
+                                , data: {"messageCode":messagecode,"messageTitle":messagetitle,"messageContent":messagecontent}
+                                , success: function (rec) {
+                                    if (rec.code == 0) {
+                                        layer.msg("添加留言成功...");
+                                        setTimeout(function () {
+                                            location.href="/html/notice/leaveMessage.html"
+                                        },2000)
+                                    } else {
+                                        layer.msg("添加留言失败");
+                                        setTimeout(function () {
+                                            location.href="/html/notice/leaveMessage.html"
+                                        },2000)
+                                    }
+                                }
+
+                            })
+
+                        }
+
+                    }
+                })
+            }
+
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('确定删除该留言吗？', {
+                    btn: ['确定', '取消'] //可以无限个按钮
+                }, function(index, layero){
+                    $.ajax({
+                        url:"/leaveMessage/removeById.do"
+                        ,dataType:"json"
+                        ,type:"get"
+                        ,data:{"id":data.id}
+                        ,success:function (rec) {
+                            if(rec.code==0){
+                                layer.msg("删除成功....");
+                                setTimeout(function () {
+                                    location.href="/html/notice/leaveMessage.html"
+                                },2000)
+                            }else {
+                                layer.msg("删除失败....");
+                                setTimeout(function () {
+                                    location.href="/html/notice/leaveMessage.html"
+                                },2000)
+                            }
+                        }
+                    })
+                }, function(index){
+
+                });
+
+            } else if (obj.event === 'edit') {
+                layer.open({
+                    type: 1
+                    , title: "回复留言" //不显示标题栏
+                    , closeBtn: false
+                    , area: '[800px,700px]'
+                    , shade: 0.8
+                    , id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                    , btn: ['确认修改', '取消']
+                    , btnAlign: 'c'
+                    , moveType: 1 //拖拽模式，0或者1
+                    , content: '<from class="layui-form layuimini-form">\n' +
+                        '    <div class="layui-form-item">\n' +
+                        '    <label class="layui-form-label required">回复内容</label>\n' +
+                        '    <div class="layui-input-block">\n' +
+                        '        <input type="text" name="replycontent" lay-verify="required" lay-reqtext="不能为空" placeholder="回复内容" value="" class="layui-input">\n' +
+                        '    </div>\n' +
+                        '</div>\n' +
+                        '</from>'
+                    , success: function (layero) {
+
+                    },yes: function (index, layero) {
+                        var replycontent=$("input[name=replycontent]").val();
+                        if (replycontent == null || replycontent == "") {
+                            layer.msg("内容不能为空")
+                        }  else {
+                            $.ajax({
+                                url: "/leaveReply/saveMessage.do"
+                                , dataType: "json"
+                                , type: "get"
+                                , data: {"replyContent": replycontent, "messageId": data.id}
+                                , success: function (rec) {
+                                    if (rec.code == 0) {
+                                        layer.msg("回复成功...");
+                                        setTimeout(function () {
+                                            location.href = "/html/notice/leaveMessage.html"
+                                        }, 2000)
+                                    } else {
+                                        layer.msg("回复失败");
+                                        setTimeout(function () {
+                                            location.href = "/html/notice/leaveMessage.html"
+                                        }, 2000)
+                                    }
+                                }
+
+                            })
+
+                        }
+                    }
+                })
+            }
+        });
+
+
+    })
+</script>
+<script type="text/html" id="typeTpl">
+    {{#  if(d.state ==0 ){ }}
+    <p>未回复</p>
+    {{#  } else if(d.state ==1 ){ }}
+    <p>已回复</p>
+    {{#  } }}
+</script>
+</html>
