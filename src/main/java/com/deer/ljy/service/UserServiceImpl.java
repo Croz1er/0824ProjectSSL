@@ -38,8 +38,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> selectAll(User user,int page,int limit) {
+    public List<User> selectAll(User user,Integer level,int page,int limit) {
+        System.out.println(page);
+        System.out.println(limit);
         PageHelper.startPage(page,limit);
+        user.setLevel(level);
         return userMapper.selectAll(user);
     }
 
@@ -65,5 +68,23 @@ public class UserServiceImpl implements UserService {
             count = update2(new_password, id);
         }
         return count;
+    }
+
+    @Transactional
+    @Override
+    public int lockUser(int isStart, Integer id) {
+        return userMapper.lockUser(isStart, id);
+    }
+
+    @Transactional
+    @Override
+    public int deleteUser(Integer id) {
+        return userMapper.deleteUser(id);
+    }
+
+    @Transactional
+    @Override
+    public int updateUSer(User user) {
+        return userMapper.updateUSer(user);
     }
 }

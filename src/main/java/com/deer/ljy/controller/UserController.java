@@ -1,9 +1,12 @@
 package com.deer.ljy.controller;
 
+import com.deer.ljy.pojo.Dictionary;
+import com.deer.ljy.pojo.Role;
 import com.deer.ljy.pojo.User;
 
 
 import com.deer.ljy.pojo.base.BaseResult;
+import com.deer.ljy.service.DictionaryService;
 import com.deer.ljy.service.RoleService;
 import com.deer.ljy.service.UserService;
 import com.github.pagehelper.PageInfo;
@@ -31,6 +34,8 @@ public class UserController {
     private UserService userService;
     @Resource
     private RoleService roleService;
+    @Resource
+    private DictionaryService dictionaryService;
 
     //跳转首页
     @RequiresUser
@@ -39,6 +44,7 @@ public class UserController {
         BaseResult<User> result = new BaseResult<>();
         String username = request.getRemoteUser();
         User userByUsername = userService.findUserByUsername(username);
+        System.out.println("++++++=====++++++++"+userByUsername);
         if (userByUsername != null) {
             result.setCode(0);
             result.setData(userByUsername);
@@ -50,8 +56,34 @@ public class UserController {
         return result;
     }
 
+    //通过用户名查找id
+    @RequestMapping("/getStsuts.do")
+    public BaseResult<User> getIsStart(String username) {
+        BaseResult<User> result = new BaseResult<>();
+        int i = 0;
+        User userByUsername = userService.findUserByUsername(username);
+        if (userByUsername != null) {
+            Integer isStart = userByUsername.getIsStart();
+            if (isStart == 1) {
+                i = userService.lockUser(0, userByUsername.getId());
+            } else {
+                i = userService.lockUser(1, userByUsername.getId());
+            }
+            if (i > 0) {
+                result.setCode(0);
+            } else {
+                result.setCode(1);
+            }
+        } else {
+            result.setCode(1);
+        }
+        return result;
+    }
+
+
     //管理员访问
-    @RequiresUser
+    //该模块下所有子模块初始化之前先访问该接口,判定是否符合权限
+    @RequiresPermissions(value ={"/user","/back"})
     @RequestMapping("/checking.do")
     public BaseResult<User> adminPage() {
         BaseResult<User> result = new BaseResult<>();
@@ -94,6 +126,34 @@ public class UserController {
         return result;
     }
 
+    //用户修改
+    @RequestMapping("/updateUser.do")
+    public BaseResult updateUser(User user) {
+        BaseResult result = new BaseResult<>();
+
+        System.out.println(user);
+        user.setLastUpdateTime(new Date());
+        int i = userService.updateUSer(user);
+        if (i > 0) {
+            result.setCode(0);
+
+            Session session = SecurityUtils.getSubject().getSession();
+            User sessionUser = (User) session.getAttribute("sessionUser");
+            System.out.println(sessionUser);
+            if (sessionUser.getId().equals(user.getId())) {
+                User userById = userService.findUserByUsername(user.getUsername());
+                System.out.println("修改后的"+userById);
+                session.setAttribute("sessionUser", userById);
+            }
+
+        } else {
+            result.setCode(1);
+        }
+
+        return result;
+    }
+
+
     //查找所有非注册用户的推荐人
     @RequestMapping("/findRefer.do")
     public BaseResult<List<User>> findUsers() {
@@ -108,15 +168,37 @@ public class UserController {
         return result;
     }
 
+    //查找所有对应类型的字典信息
+    @RequestMapping("/findAllDictionary.do")
+    public BaseResult<List<Dictionary>> findDictionaries(String type) {
+        BaseResult<List<Dictionary>> result = new BaseResult<>();
+        List<Dictionary> byType = dictionaryService.findDictByType(type);
+        if (byType.isEmpty()) {
+            result.setCode(1);
+            return result;
+        }
+        result.setCode(0);
+        result.setData(byType);
+        return result;
+    }
+
     //查找所有用户
+    @RequiresPermissions("/user/find.do")
     @RequestMapping("/findAll.do")
-    public BaseResult<List<User>> findAllUsers(User user, int page, int limit) {
-        System.out.println("user的值" + user);
+    public BaseResult<List<User>> findAllUsers(User user, Integer level, int page, int limit) {
         User attribute = (User) SecurityUtils.getSubject().getSession().getAttribute("sessionUser");
+        System.out.println("session的值"+attribute);
         user.setRoleName(attribute.getRoleName());
-        user.setReferCode(attribute.getReferCode());
+        user.setReferId(attribute.getId());
         BaseResult<List<User>> result = new BaseResult<>();
-        List<User> users = userService.selectAll(user, page, limit);
+        if (user.getUsername() == null || user.getUsername().equals("")) {
+            user.setUsername(null);
+        } else {
+            String username = user.getUsername();
+            user.setUsername("%" + username + "%");
+        }
+        System.out.println("user的值" + user);
+        List<User> users = userService.selectAll(user, level, page, limit);
         if (users == null || users.isEmpty()) {
             result.setCode(1);
         } else {
@@ -135,7 +217,7 @@ public class UserController {
         BaseResult result = new BaseResult();
         System.out.println("旧密码" + old_password);
         System.out.println("新密码" + new_password);
-        System.out.println("等级"+globe);
+        System.out.println("等级" + globe);
         Session session = SecurityUtils.getSubject().getSession();
         User user = (User) session.getAttribute("sessionUser");
         if (globe == 1) {
@@ -160,7 +242,7 @@ public class UserController {
 
     //获取session
     @RequestMapping("/sessionUser.do")
-    public BaseResult<User> sessionUser(){
+    public BaseResult<User> sessionUser() {
         Session session = SecurityUtils.getSubject().getSession();
         User user = (User) session.getAttribute("sessionUser");
         BaseResult<User> result = new BaseResult<>();
@@ -169,4 +251,15 @@ public class UserController {
     }
 
 
+    @RequestMapping("/deleteUser.do")
+    public BaseResult<User> deleteUser(Integer id) {
+        BaseResult result = new BaseResult();
+        int i = userService.deleteUser(id);
+        if (i > 0) {
+            result.setCode(0);
+        } else {
+            result.setCode(1);
+        }
+        return result;
+    }
 }

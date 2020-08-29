@@ -1,6 +1,7 @@
 package com.deer.ljy.pojo;
 
 import lombok.Data;
+import org.springframework.data.annotation.Transient;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -41,6 +42,9 @@ public class User implements Serializable {
     private String accountHolder;
     private String idCardPicPath;
     private String bankPicPath;
+
+    //由于此处不用序列化,因此不需要加@Transient
+    private Integer level;
 
 
 

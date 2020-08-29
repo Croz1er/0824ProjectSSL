@@ -1,6 +1,7 @@
 package com.deer.ljy.pojo;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -13,5 +14,6 @@ public class Func {
     private String funcName;
     private String funcUrl;
     private Integer parentId;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date creationTime;
 }

@@ -89,17 +89,17 @@
         <dependency>
             <groupId>org.pac4j</groupId>
             <artifactId>pac4j-core</artifactId>
-            <version>4.0.0</version>
+            <version>3.8.3</version>
         </dependency>
         <dependency>
             <groupId>org.pac4j</groupId>
             <artifactId>pac4j-cas</artifactId>
-            <version>4.0.0</version>
+            <version>3.8.3</version>
         </dependency>
         <dependency>
             <groupId>io.buji</groupId>
             <artifactId>buji-pac4j</artifactId>
-            <version>5.0.0</version>
+            <version>4.0.0</version>
         </dependency>
 
 

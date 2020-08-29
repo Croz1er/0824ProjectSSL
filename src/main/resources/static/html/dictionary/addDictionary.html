@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" href="/lib/layui/css/layui.css" media="all">
+<link rel="stylesheet" href="/css/public.css" media="all">
+
+<body>
+<form class="layui-form" lay-filter="funcForm">
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称
+            <span style="color: red">*</span>
+        </label>
+        <div class="layui-input-block">
+            <input type="text" name="valueName" lay-verify="required" autocomplete="off" placeholder="请输入名称"
+                   class="layui-input">
+        </div>
+
+        <label class="layui-form-label">类型
+            <span style="color: red">*</span>
+        </label>
+        <div class="layui-input-block">
+            <input type="text" name="typeName" lay-verify="required" autocomplete="off" placeholder="请输入类型"
+                   class="layui-input">
+        </div>
+
+        <label class="layui-form-label">编码
+            <span style="color: red">*</span>
+        </label>
+        <div class="layui-input-block">
+            <input type="text" name="typeCode" lay-verify="required" autocomplete="off" placeholder="请输入编码"
+                   class="layui-input">
+        </div>
+        <label class="layui-form-label">数据值
+            <span style="color: red">*</span>
+        </label>
+
+        <div class="layui-input-block">
+            <input type="text" name="valueId" lay-verify="required" autocomplete="off" placeholder="请输入数据值"
+                   class="layui-input">
+        </div>
+
+
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+</body>
+<script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+<script src="/lib/layui/layui.js" charset="utf-8"></script>
+<script src="/js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script>
+
+
+
+
+
+    layui.use(['form', 'jquery', 'layedit', 'laydate'], function () {
+
+
+        var form = layui.form
+            , $ = layui.jquery
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+
+        //监听提交
+        form.on('submit(demo1)', function (data) {
+            console.log(data.field);
+            let val = form.val("funcForm");
+            console.log(data.field);
+
+            $.ajax({
+                url: "http://127.0.0.1:8082/dictionary/addDict.do",
+                type: "post",
+                data: data.field,
+                dataType: "json",
+                success: function (rec) {
+                    if (rec.code === 0) {
+                        layer.msg("添加成功", {icon: 6, time: 1000},function () {
+                            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            parent.layer.close(index);
+                        });
+                        return false;
+                    } else {
+                        layer.msg("添加失败", {icon: 5, time: 1000});
+                        return false;
+                    }
+                }
+            });
+            return false;
+        });
+    })
+</script>
+</html>

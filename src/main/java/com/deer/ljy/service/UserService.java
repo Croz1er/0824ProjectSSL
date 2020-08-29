@@ -14,12 +14,19 @@ public interface UserService {
 
     User findUserById(Integer id);
 
-    List<User> selectAll(User user,int page,int limit);
+    List<User> selectAll(User user,Integer level,int page,int limit);
 
     int update1(String new_password,Integer id);
 
     int update2(String new_password,Integer id);
 
+    int lockUser(int isStart, Integer id);
+
     int updatePWD(String new_password,Integer id,Integer globe);
+
+    int deleteUser(Integer id);
+
+    int updateUSer(User user);
+
 
 }

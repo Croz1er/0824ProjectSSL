@@ -3,6 +3,7 @@ package com.deer.ljy.realm;
 import io.buji.pac4j.realm.Pac4jRealm;
 import io.buji.pac4j.subject.Pac4jPrincipal;
 import io.buji.pac4j.token.Pac4jToken;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -58,12 +59,26 @@ public class MyRealm extends Pac4jRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        System.out.println("授权开启"+principals.asList());
+        System.out.println("授权开启"+principals.asSet());
+        System.out.println("授权开启"+principals.getRealmNames());
         System.out.println("授权开启"+principals);
+
+
+
         if (principals == null){
             throw new AuthorizationException("角色为空异常");
         }
         //获取角色的用户名
-        String username = (String) this.getAvailablePrincipal(principals);
+        System.out.println(this.getAvailablePrincipal(principals));
+        String username = null;
+        try {
+            Pac4jPrincipal pac4jPrincipal = (Pac4jPrincipal) this.getAvailablePrincipal(principals);
+            username = pac4jPrincipal.getProfile().getId();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("11223344"+username);
 
         Connection connection = null;
         Set<String> rolename = null;
@@ -93,11 +108,12 @@ public class MyRealm extends Pac4jRealm {
             statement = connection.prepareStatement(sql);
             statement.setString(1,username);
             ResultSet resultSet = statement.executeQuery();
+            permission = new HashSet<>();
             while (resultSet.next()){
                 //将获取的
                 String funcUrl = resultSet.getString("funcUrl");
-                permission = new HashSet<>();
                 permission.add(funcUrl);
+                System.out.println(funcUrl);
             }
             System.out.println("获取的权限"+permission);
         } catch (SQLException e) {
