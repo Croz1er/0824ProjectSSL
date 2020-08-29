@@ -2,6 +2,7 @@ package com.deer.qx.controller.agent;
 
 import com.deer.ljy.pojo.User;
 import com.deer.ljy.pojo.base.BaseResult;
+import com.deer.qx.model.agent.Agent;
 import com.deer.qx.service.agent.AgentService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -61,5 +62,23 @@ public class AgentController {
             return result;
         }
     }
+
+
+    @RequestMapping("/chart.do")
+    public  BaseResult chart(){
+        List<Agent> select = agentService.select();
+        BaseResult result = new BaseResult();
+        if(!select.isEmpty()){
+            result.setCode(0);
+            result.setData(select);
+            return result;
+        }
+        else {
+            result.setCode(1);
+            return result;
+        }
+    }
+
+
     
 }

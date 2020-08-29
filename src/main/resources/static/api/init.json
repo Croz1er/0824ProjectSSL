@@ -28,8 +28,8 @@
               "target": "_self"
             },
             {
-              "title": "代理商审核",
-              "href": "a2.html",
+              "title": "代理商图表",
+              "href": "/html/agent/agentChart.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }

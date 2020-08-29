@@ -2,6 +2,7 @@ package com.deer.qx.service.agent;
 
 import com.deer.ljy.pojo.User;
 import com.deer.qx.mapper.agent.AgetnMapper;
+import com.deer.qx.model.agent.Agent;
 import com.deer.qx.model.goods.Goods_info;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.ParameterResolutionDelegate;
@@ -35,4 +36,8 @@ public class AgentServiceImpl implements AgentService {
     }
 
 
+    @Override
+    public List<Agent> select() {
+        return agetnMapper.select();
+    }
 }

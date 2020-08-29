@@ -1,6 +1,7 @@
 package com.deer.qx.mapper.agent;
 
 import com.deer.ljy.pojo.User;
+import com.deer.qx.model.agent.Agent;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -16,6 +17,9 @@ public interface AgetnMapper {
 
     @Update(value = "update  au_user set isStart =1 where id =#{id}")
     int update(User user);
+
+    @Select(value = "SELECT agent.reward,au_user.username,agent.num FROM agent LEFT JOIN au_user ON agent.userid = au_user.id")
+    List<Agent> select();
 
 
 
