@@ -11,6 +11,4 @@ public interface GoodMapper {
     List<Goods_info> selectAll();
 
 
-
-
 }
