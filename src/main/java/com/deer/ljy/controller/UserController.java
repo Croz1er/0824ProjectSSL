@@ -82,18 +82,22 @@ public class UserController {
 
 
     //管理员访问
+
+    //注解
     //该模块下所有子模块初始化之前先访问该接口,判定是否符合权限
     @RequiresPermissions(value ={"/user","/back"})
+
     @RequestMapping("/checking.do")
     public BaseResult<User> adminPage() {
         BaseResult<User> result = new BaseResult<>();
         User user = (User) SecurityUtils.getSubject().getSession().getAttribute("sessionUser");
         System.out.println(user);
-        if (user.getRoleName().equals("管理员")) {
-            result.setCode(0);
-        } else {
-            result.setCode(1);
-        }
+//        if (user.getRoleName().equals("管理员")) {
+//            result.setCode(0);
+//        } else {
+//            result.setCode(1);
+//        }
+        result.setCode(0);
         return result;
     }
 
