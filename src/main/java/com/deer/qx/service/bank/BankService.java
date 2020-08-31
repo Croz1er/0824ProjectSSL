@@ -17,11 +17,14 @@ public interface BankService {
 
     List<Account_detail> selectOut(Account_detail account_detail, int page, int limit);
 
-    int   transfer(User_account user_account, User user);
+    int transfer(User_account user_account, User user);
 
     User selectByUsername(User user);
 
     User_account selectByBalance(int userId);
+
+
+    int insertUserAccount();
 
 
 }

@@ -170,7 +170,7 @@
 
     function child() {
         $.ajax({
-            url: "http://127.0.0.1:8082/user/sessionUser.do",
+            url: "http://192.168.100.222:8082/user/sessionUser.do",
             type: "post",
             dataType: "json",
             data: {page: -1, limit: -1},
@@ -192,7 +192,7 @@
                 , laydate = layui.laydate;
 
             $.ajax({
-                url: "http://127.0.0.1:8082/user/findAllDictionary.do",
+                url: "http://192.168.100.222:8082/user/findAllDictionary.do",
                 type: "post",
                 dataType: "json",
                 data: {type: "证件类型"},
@@ -233,7 +233,7 @@
             form.on('submit(demo1)', function (data) {
 
                 $.ajax({
-                    url: "http://127.0.0.1:8082/user/updateUser.do",
+                    url: "http://192.168.100.222:8082/user/updateUser.do",
                     type: "post",
                     data: form.val("numb_edit"),
                     dataType: "json",

@@ -9,6 +9,7 @@ import com.deer.qx.model.order.Order_info;
 import com.deer.qx.service.Orders.OrdersService;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +57,7 @@ public class OrdersController {
     }
 
     //订单详情
+    @RequiresPermissions({"/shop/selectOrders.do","/shop"})
     @RequestMapping("/findOrderAll.do")
     public BaseResult findOrderAll(Order_goods order_goods,int page,int limit){
         Session session = SecurityUtils.getSubject().getSession();

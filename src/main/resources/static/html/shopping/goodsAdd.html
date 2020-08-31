@@ -36,6 +36,7 @@
                             <button type="submit" class="layui-btn layui-btn-primary" lay-submit
                                     lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索
                             </button>
+                            <input style="line-height: 38px"; id="del" class="layui-btn" type="button"value="删除">
                             <input style="line-height: 38px"; id="insert" class="layui-btn" type="button"value="新增商品">
                         </div>
                     </div>
@@ -55,6 +56,24 @@
     layui.use(['form','table'],function () {
             var table=layui.table;
             var form=layui.form;
+
+        $.ajax({
+            url: "http://192.168.100.222:8082/user/checking.do",
+            type: "post",
+            dataType: "json",
+            success: function (rec) {
+                if (rec.code !== 0) {
+                    layer.msg("非管理员无权访问查询页面,请联系管理员", {icon: 5, time: 1500}, function () {
+                        window.location.href = "/html/welcome.html?t=1";
+                    })
+                } else {
+                    init();
+                }
+            }
+        });
+
+        function init() {
+
             var userTable=table.render({
                 elem: '#demo'
                 , height: 'full'
@@ -79,6 +98,14 @@
                     ,{field: 'lastUpdateTime',title: '更新时间',align: 'center',templet : "<div>{{layui.util.toDateString(d.lastUpdateTime, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
                     , {title: '操作', align: 'center', toolbar: '#barDemo'}
                 ]] //这里的toolbar值是模板元素的选择器
+                ,
+                done:function (rec) {
+                    if (rec.code===2){
+                        layer.msg("无权访问该页面", {icon: 5, time: 1500}, function () {
+                            window.location.href = "/html/welcome.html?t=1";
+                        })
+                    }
+                }
             });
 
         // $("#qy").on("click",function () {
@@ -116,9 +143,6 @@
         $("#insert").on("click",function () {
             location.href="/html/shopping/insertGoods.html"
         })
-
-
-
 
         $("#del").on("click",function () {
             var checkStatus =table.checkStatus("demo");
@@ -238,8 +262,8 @@
                    "&note="+data.note+"&num="+data.num+"&state="+data.state+"&lastUpdateTime="+data.lastUpdateTime
             }
         });
-
-            })
+        }
+    })
 
 </script>
 <script type="text/html" id="barDemo">

@@ -88,7 +88,7 @@
             , laydate = layui.laydate;
 
         $.ajax({
-            url: 'http://127.0.0.1:8082/role/findAllfunc.do',
+            url: 'http://192.168.100.222:8082/role/findAllfunc.do',
             type: "post",
             dataType: "json",
             data:{roleId:null},
@@ -119,7 +119,7 @@
             let val = form.val("funcForm");
             console.log(val);
             $.ajax({
-                url: "http://127.0.0.1:8082/role/addFunc.do",
+                url: "http://192.168.100.222:8082/role/addFunc.do",
                 type: "post",
                 data: data.field,
                 dataType: "json",

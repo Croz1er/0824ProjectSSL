@@ -68,7 +68,7 @@
         var form = layui.form;
 
         $.ajax({
-            url: "http://127.0.0.1:8082/user/checking.do",
+            url: "http://192.168.100.222:8082/user/checking.do",
             type: "post",
             dataType: "json",
             success: function (rec) {
@@ -87,7 +87,7 @@
 
             //获取角色列表
             $.ajax({
-                url: "http://127.0.0.1:8082/role/findAllRole.do",
+                url: "http://192.168.100.222:8082/role/findAllRole.do",
                 type: "post",
                 dataType: "json",
                 data: {page: -1, limit: -1},
@@ -142,7 +142,7 @@
                     treeIdName: 'authorityId',
                     treePidName: 'parentId',
                     elem: '#munu-table',
-                    url: 'http://127.0.0.1:8082/meuns/findAll.do',
+                    url: 'http://192.168.100.222:8082/meuns/findAll.do',
                     where: {'roleId': roleId},
                     page: false,
                     toolbar: '#headertoolbar',//开启头部工具栏
@@ -189,7 +189,7 @@
                             str += "&funcId=" + funcId;
                         }
                         $.ajax({
-                            url: "http://127.0.0.1:8082/meuns/modify.do",
+                            url: "http://192.168.100.222:8082/meuns/modify.do",
                             type: "post",
                             data: str,
                             dataType: "json",
@@ -239,7 +239,7 @@
                 if (layEvent === 'del') {
                     layer.confirm("确定删除权限吗?", {icon: 3}, function () {
                         $.ajax({
-                            url: 'http://127.0.0.1:8082/role/delFunc.do',
+                            url: 'http://192.168.100.222:8082/role/delFunc.do',
                             type: "post",
                             data: {id: data.id},
                             dataType: "json",

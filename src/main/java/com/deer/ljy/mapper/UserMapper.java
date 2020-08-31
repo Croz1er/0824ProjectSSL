@@ -21,11 +21,14 @@ public interface UserMapper {
             "values" +
             "(#{username},#{password},#{password2},#{realName},#{cardTypeName},#{idCard},#{country},#{mobile}," +
             "#{email},#{userAddress},#{postCode},#{referId},#{referCode},#{roleId},#{roleName}," +
-            "#{createTime},#{isStart},#{lastUpdateTime},#{lastLoginTime},#{bankName},#{accountHolder},#{bankAccount})")
+            "#{createTime},0,#{lastUpdateTime},#{lastLoginTime},#{bankName},#{accountHolder},#{bankAccount})")
     int insertUser(User user);
 
     @Select("select * from au_user where roleId != 2")
     List<User> selectAllUser();
+
+    @Select("select * from au_user where roleId")
+    List<User> selectAllUser1();
 
     @SelectProvider(type = UserProvider.class, method = "selectAll")
     List<User> selectAll(final User user);

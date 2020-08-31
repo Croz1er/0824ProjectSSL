@@ -70,7 +70,7 @@ public class SpringShiroConfig {
         System.out.println( "shiro Filter....." );
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        shiroFilterFactoryBean.setLoginUrl("http://127.0.0.1:8082/html/login.html");
+        shiroFilterFactoryBean.setLoginUrl("http://192.168.100.222/html/login.html");
 
         //1.设置认证管理器使用的Realm和认证交由CAS处理
         DefaultWebSecurityManager sm = (DefaultWebSecurityManager) securityManager;

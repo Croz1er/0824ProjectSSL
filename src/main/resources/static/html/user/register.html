@@ -209,7 +209,7 @@
             , laydate = layui.laydate;
 
         $.ajax({
-            url: "http://127.0.0.1:8082/user/checking.do",
+            url: "http://192.168.100.222:8082/user/checking.do",
             type: "post",
             dataType: "json",
             success: function (rec) {
@@ -227,7 +227,7 @@
         function init() {
 
             $.ajax({
-                url: "http://127.0.0.1:8082/role/findAllRole.do",
+                url: "http://192.168.100.222:8082/role/findAllRole.do",
                 type: "post",
                 dataType: "json",
                 data: {page: -1, limit: -1},
@@ -246,7 +246,7 @@
             });
 
             $.ajax({
-                url: "http://127.0.0.1:8082/user/findRefer.do",
+                url: "http://192.168.100.222:8082/user/findRefer.do",
                 type: "post",
                 dataType: "json",
                 success: function (rec) {
@@ -264,7 +264,7 @@
             });
 
             $.ajax({
-                url: "http://127.0.0.1:8082/user/findAllDictionary.do",
+                url: "http://192.168.100.222:8082/user/findAllDictionary.do",
                 type: "post",
                 dataType: "json",
                 data: {type: "证件类型"},
@@ -284,7 +284,7 @@
             //监听提交
             form.on('submit(demo1)', function (data) {
                 $.ajax({
-                    url: "http://127.0.0.1:8082/user/register.do",
+                    url: "http://192.168.100.222:8082/user/register.do",
                     type: "get",
                     data: form.val("register"),
                     dataType: "json",

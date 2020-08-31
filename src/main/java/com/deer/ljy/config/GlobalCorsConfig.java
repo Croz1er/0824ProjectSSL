@@ -32,7 +32,7 @@ public class GlobalCorsConfig implements WebMvcConfigurer {
     public FilterRegistrationBean corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);	config.addAllowedOrigin("http://127.0.0.1:8082");
+        config.setAllowCredentials(true);	config.addAllowedOrigin("http://192.168.100.222:8082");
         config.addAllowedOrigin("null");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");

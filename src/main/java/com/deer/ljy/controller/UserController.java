@@ -9,6 +9,9 @@ import com.deer.ljy.pojo.base.BaseResult;
 import com.deer.ljy.service.DictionaryService;
 import com.deer.ljy.service.RoleService;
 import com.deer.ljy.service.UserService;
+import com.deer.qx.model.account.User_account;
+import com.deer.qx.service.agent.AgentService;
+import com.deer.qx.service.bank.BankService;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -36,6 +39,12 @@ public class UserController {
     private RoleService roleService;
     @Resource
     private DictionaryService dictionaryService;
+
+    @Resource
+    private AgentService agentService;
+
+    @Resource
+    private BankService bankService;
 
     //跳转首页
     @RequiresUser
@@ -82,21 +91,14 @@ public class UserController {
 
 
     //管理员访问
-
     //注解
     //该模块下所有子模块初始化之前先访问该接口,判定是否符合权限
     @RequiresPermissions(value ={"/user","/back"})
-
     @RequestMapping("/checking.do")
     public BaseResult<User> adminPage() {
         BaseResult<User> result = new BaseResult<>();
         User user = (User) SecurityUtils.getSubject().getSession().getAttribute("sessionUser");
         System.out.println(user);
-//        if (user.getRoleName().equals("管理员")) {
-//            result.setCode(0);
-//        } else {
-//            result.setCode(1);
-//        }
         result.setCode(0);
         return result;
     }
@@ -122,11 +124,19 @@ public class UserController {
         user.setLastLoginTime(new Date());
 
         int i = userService.insertUser(user);
+
+        //代理商
+        int i1 = agentService.insertAgent();
+
+        //用户账户
+        int i2 = bankService.insertUserAccount();
+
         if (i > 0) {
             result.setCode(0);
         } else {
             result.setCode(1);
         }
+
         return result;
     }
 
@@ -251,6 +261,7 @@ public class UserController {
         User user = (User) session.getAttribute("sessionUser");
         BaseResult<User> result = new BaseResult<>();
         result.setData(user);
+        result.setCode(0);
         return result;
     }
 

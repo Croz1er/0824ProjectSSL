@@ -173,7 +173,7 @@
                         }
                     }
                 })
-                alert("购买成功")
+                alert("购买成功,重新登录后生效!")
 
             }
         });
@@ -186,7 +186,7 @@
                 var data = r.data;
                 $("#balance").html(data.balance)
             }
-        })
+        });
 
         $.ajax({
             url: "/user/sessionUser.do",
@@ -196,7 +196,7 @@
                 var data = r.data;
                 $("#username").val(data.username)
             }
-        })
+        });
 
          form.render();
      });

@@ -43,11 +43,11 @@
 
     </div>
 
-    <div class="layui-row layui-col-space15">
-        <div class="layui-col-xs12 layui-col-md6">
-            <div id="echarts-dataset" style="background-color:#ffffff;min-height:300px;padding: 10px"></div>
-        </div>
-    </div>
+<!--    <div class="layui-row layui-col-space15">-->
+<!--        <div class="layui-col-xs12 layui-col-md6">-->
+<!--            <div id="echarts-dataset" style="background-color:#ffffff;min-height:300px;padding: 10px"></div>-->
+<!--        </div>-->
+<!--    </div>-->
 
 
 </div>
@@ -60,121 +60,89 @@
             layer = layui.layer,
             echarts = layui.echarts;
 
+        $.ajax({
+            url: 'http://192.168.100.222:8082/agent/chart.do',
+            type: "post",
+            dataType: "json",
+            success: function (rec) {
+                console.log("MR" + rec.data);
+                let data = rec.data;
 
-            $.ajax({
-                url: 'http://127.0.0.1:8082/agent/chart.do',
-                type: "post",
-                dataType: "json",
-                success: function (rec) {
-                    console.log("MR" + rec.data);
-                    let data = rec.data;
-
-                    let username = [];
-                    let num = [];
-                    let reward = [];
+                let username = [];
+                let num = [];
+                let reward = [];
 
 
-                    bbq:
-                        for (let dataKey of rec.data) {
-                            username.push(dataKey.userName);
-                            num.push(dataKey.num);
-                            reward.push(dataKey.reward)
+                bbq:
+                    for (let dataKey of rec.data) {
+                        console.log(JSON.stringify(dataKey));
+                        username.push(dataKey.userName);
+                        num.push(dataKey.num);
+                        reward.push(dataKey.reward)
+                    }
+                console.log(username);
+                console.log(num);
+                console.log(reward);
+
+                /**
+                 * MP报表功能
+                 */
+                var echartsRecords = echarts.init(document.getElementById('echarts-records'), 'walden');
+
+                var optionRecords = {
+                    title: {
+                        text: '提成'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985'
+                            }
                         }
+                    },
 
-                    /**
-                     * MP报表功能
-                     */
-                    var echartsRecords = echarts.init(document.getElementById('echarts-records'), 'walden');
-
-                    var optionRecords = {
-                        title: {
-                            text: '提成'
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: username
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '提成',
+                            type: 'line',
+                            stack: '总量',
+                            areaStyle: {},
+                            data: reward
                         },
-                        tooltip: {
-                            trigger: 'axis',
-                            axisPointer: {
-                                type: 'cross',
-                                label: {
-                                    backgroundColor: '#6a7985'
-                                }
-                            }
-                        },
-
-                        toolbox: {
-                            feature: {
-                                saveAsImage: {}
-                            }
-                        },
-                        grid: {
-                            left: '3%',
-                            right: '4%',
-                            bottom: '3%',
-                            containLabel: true
-                        },
-                        xAxis: [
-                            {
-                                type: 'category',
-                                boundaryGap: false,
-                                data: username
-                            }
-                        ],
-                        yAxis: [
-                            {
-                                type: 'value'
-                            }
-                        ],
-                        series: [
-                            {
-                                name: '提成',
-                                type: 'line',
-                                stack: '总量',
-                                areaStyle: {},
-                                data: reward
-                            },
-                        ]
-                    };
-                    echartsRecords.setOption(optionRecords);
-                    // echarts 窗口缩放自适应
-                    window.onresize = function () {
-                        echartsRecords.resize();
-                    };
-                    /**
-                     * MP柱状图
-                     */
-                    var echartsDataset = echarts.init(document.getElementById('echarts-dataset'), 'walden');
-                    var source1 = "{product: 'num'";
-                    let sources = [];
-
-                    for (let roleName of username) {
-                        let obj = {product: roleName};
-                        //元数据的遍历
-                        sources.push(obj);
-                    }
-                    console.log(sources)
-
-                    let series = [];
-                    console.log(num.length);
-                    for (let i = 0; i < (num.length <= 5 ? num.length : 5); i++) {
-                        series.push({type: 'bar'})
-                    }
-                    // console.log(series)
-
-                    var optionDataset = {
-                        legend: {},
-                        tooltip: {},
-                        dataset: {
-                            dimensions: username,
-                            source: [
-                                num,
-                            ]
-                        },
-                        xAxis: {type: 'category'},
-                        yAxis: {},
-                        series: series
-                    };
-                    echartsDataset.setOption(optionDataset);
-                }
-            });
+                    ]
+                };
+                echartsRecords.setOption(optionRecords);
+                // echarts 窗口缩放自适应
+                window.onresize = function () {
+                    echartsRecords.resize();
+                };
+            }
+        });
     });
 </script>
 </body>

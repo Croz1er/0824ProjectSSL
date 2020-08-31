@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-<!--    <script src="/js/layui/layui.all.js" charset="utf-8"></script>-->
+    <!--    <script src="/js/layui/layui.all.js" charset="utf-8"></script>-->
     <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
     <link rel="stylesheet" href="/lib/layui/css/layui.css">
 
@@ -12,8 +12,6 @@
 
 
 </div>
-
-
 
 
 <div class="layuimini-container">
@@ -46,66 +44,45 @@
     </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
 <script src="/lib/getUrl.js"></script>
 <script src="/lib/layui/layui.js"></script>
 <script>
-    layui.use(['form','table'],function () {
-            var table=layui.table;
-            var form = layui.form;
+    layui.use(['form', 'table'], function () {
+        var table = layui.table;
+        var form = layui.form;
 
-            var userTable=table.render({
-                elem: '#demo'
-                , height: 'full'
-                , url: '/goods/list.do' //数据接口
-                , even: true
-                , page: true //开启分页
-                , limit: 5
-                , limits: [5, 10, 15, 20]
-                , cols: [[ //表头
-                    {type: 'checkbox', fixed: 'left'},
-                    {field: 'id', hide: true}
-                    , {field: 'goodsSN', title: '商品编码', align: 'center'}
-                    , {field: 'goodsName', title: '商品名称', align: 'center'}
-                    , {field: 'goodsFormat',   title: '商品规格',align: 'center',hide:true}
-                    , {field: 'marketPrice',   title: '市场价',align: 'center'}
-                    , {field: 'realPrice',   title: '优惠价格',align: 'center'}
-                    , {field: 'note',   title: '商品说明',align: 'center'}
-                    , {field: 'num',   title: '库存数量',align: 'center'}
-                    , {field: 'state',   title: '状态',align: 'center',templet:function (rec) {
-                            return rec.state===1?"上架":"下架"
-                        }}
-                    ,{field: 'lastUpdateTime',title: '更新时间',align: 'center',templet : "<div>{{layui.util.toDateString(d.lastUpdateTime, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
-                    , {title: '操作', align: 'center', toolbar: '#barDemo'}
-                ]] //这里的toolbar值是模板元素的选择器
-            });
-
-        // $("#qy").on("click",function () {
-        //     var goodsName=$("#selectTitle").val()
-        //
-        //     $.ajax({
-        //         url:"/goods/findVague.do",
-        //         dataType:"json",
-        //         type:"post",
-        //         data:{
-        //             goodsName:goodsName
-        //         },
-        //     })
-        //
-        //     userTable.reload()
-        // });
-
-
+        var userTable = table.render({
+            elem: '#demo'
+            , height: 'full'
+            , url: '/goods/list.do' //数据接口
+            , even: true
+            , page: true //开启分页
+            , limit: 5
+            , limits: [5, 10, 15, 20]
+            , cols: [[ //表头
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', hide: true}
+                , {field: 'goodsSN', title: '商品编码', align: 'center'}
+                , {field: 'goodsName', title: '商品名称', align: 'center'}
+                , {field: 'goodsFormat', title: '商品规格', align: 'center', hide: true}
+                , {field: 'marketPrice', title: '市场价', align: 'center'}
+                , {field: 'realPrice', title: '优惠价格', align: 'center'}
+                , {field: 'note', title: '商品说明', align: 'center'}
+                , {field: 'num', title: '库存数量', align: 'center'}
+                , {
+                    field: 'state', title: '状态', align: 'center', templet: function (rec) {
+                        return rec.state === 1 ? "上架" : "下架"
+                    }
+                }
+                , {
+                    field: 'lastUpdateTime',
+                    title: '更新时间',
+                    align: 'center',
+                    templet: "<div>{{layui.util.toDateString(d.lastUpdateTime, 'yyyy-MM-dd HH:mm:ss')}}</div>"
+                }
+                , {title: '操作', align: 'center', toolbar: '#barDemo'}
+            ]] //这里的toolbar值是模板元素的选择器
+        });
 
         form.on('submit(data-search-btn)', function (data) {
             var result = JSON.stringify(data.field);
@@ -121,23 +98,18 @@
         });
 
 
+        $("#insert").on("click", function () {
+            location.href = "/html/shopping/insertGoods.html"
+        });
 
-
-        $("#insert").on("click",function () {
-            location.href="/html/shopping/insertGoods.html"
-        })
-
-
-
-
-        $("#del").on("click",function () {
-            var checkStatus =table.checkStatus("demo");
-            var data=checkStatus.data;
-            var ids=[];
-            data.forEach(function (u,i) {
+        $("#del").on("click", function () {
+            var checkStatus = table.checkStatus("demo");
+            var data = checkStatus.data;
+            var ids = [];
+            data.forEach(function (u, i) {
                 ids.push(u.id);
             });
-            if (ids.length==0){
+            if (ids.length == 0) {
                 layer.msg("请选择要删除的行")
                 return false;
             }
@@ -170,19 +142,19 @@
             var data = obj.data //获得当前行数据
                 , layEvent = obj.event; //获得 lay-event 对应的值
             if (layEvent === 'detail') {
-                var id=data.id
+                var id = data.id
                 //layer.msg('查看操作');
                 layer.open({
                     title: '商品信息'
-                    ,area:['200px','300px']
-                    ,content:
+                    , area: ['200px', '300px']
+                    , content:
 
-                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">商品名:'+ data.goodsName +'</p>' +
-                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">商品规格:'+ data.goodsFormat +'</p>' +
-                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">市场价:'+ data.marketPrice + '</p>' +
-                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">优惠价格:'+ data.realPrice +'</p>' +
-                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">库存数量:'+ data.num + '</p>' +
-                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">商品说明:'+ data.note + '</p>'
+                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">商品名:' + data.goodsName + '</p>' +
+                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">商品规格:' + data.goodsFormat + '</p>' +
+                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">市场价:' + data.marketPrice + '</p>' +
+                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">优惠价格:' + data.realPrice + '</p>' +
+                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">库存数量:' + data.num + '</p>' +
+                        '<p style="font-size: 15px;margin: auto 0 ;display: flex;justify-content: center ;text-align: center;">商品说明:' + data.note + '</p>'
                 });
 
                 console.log(data.id)
@@ -192,46 +164,47 @@
                     var data = obj.data;
 
                     $.ajax({
-                        url:"/goods/findNum.do",
-                        type:"post",
-                        dataType:"json",
+                        url: "/goods/findNum.do",
+                        type: "post",
+                        dataType: "json",
                         async: false,
-                        data:{
-                            id:data.id,
+                        data: {
+                            id: data.id,
                         },
-                        success:function (r) {
+                        success: function (r) {
                             var data1 = r.data;
-                            if(r.data.num<=0){
+                            if (r.data.num <= 0) {
                                 alert("库存没有了")
                                 $.ajax({
-                                    url:"/goods/updateState.do",
-                                    type:"post",
-                                    dataType:"json",
+                                    url: "/goods/updateState.do",
+                                    type: "post",
+                                    dataType: "json",
                                     async: false,
-                                    data:{
-                                        id:data.id,
+                                    data: {
+                                        id: data.id,
                                     },
-                                    success:function () {
+                                    success: function (rec) {
+
                                         userTable.reload();
+
                                     }
                                 })
-                            }else {
+                            } else {
                                 $.ajax({
-                                    url:"/goods/addCar.do",
-                                    type:"post",
-                                    dataType:"json",
-                                    data:{
-                                        goodsId:data.id,
-                                        goodsName:data.goodsName,
-                                        goodsPrice:data.realPrice,
-                                        goodsNum:1,
+                                    url: "/goods/addCar.do",
+                                    type: "post",
+                                    dataType: "json",
+                                    data: {
+                                        goodsId: data.id,
+                                        goodsName: data.goodsName,
+                                        goodsPrice: data.realPrice,
+                                        goodsNum: 1,
                                     },
-                                    success:function (rec) {
-                                        if(rec.code==0){
+                                    success: function (rec) {
+                                        if (rec.code == 0) {
                                             userTable.reload();
-                                        }
-                                        else {
-                                            alert("添加失败")
+                                        } else if (rec.code === 2) {
+                                            layer.msg("无权添加商品", {icon: 5, time: 1500});
                                         }
                                     }
                                 })
@@ -243,13 +216,13 @@
 
                 });
             } else if (layEvent === 'edit') {
-               location.href="/html/shopping/updateGoods.html?id="+data.id+"&goodsSN="+data.goodsSN+"&goodsName="+data.goodsName+"&goodsFormat="+data.goodsFormat+
-                   "&marketPrice="+data.marketPrice+"&realPrice="+data.realPrice+
-                   "&note="+data.note+"&num="+data.num+"&state="+data.state+"&lastUpdateTime="+data.lastUpdateTime
+                location.href = "/html/shopping/updateGoods.html?id=" + data.id + "&goodsSN=" + data.goodsSN + "&goodsName=" + data.goodsName + "&goodsFormat=" + data.goodsFormat +
+                    "&marketPrice=" + data.marketPrice + "&realPrice=" + data.realPrice +
+                    "&note=" + data.note + "&num=" + data.num + "&state=" + data.state + "&lastUpdateTime=" + data.lastUpdateTime
             }
         });
 
-            })
+    })
 
 </script>
 <script type="text/html" id="barDemo">

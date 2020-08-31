@@ -47,6 +47,13 @@
                 ,{fixed: 'right', title:'操作', toolbar: '#barDemo'}
             ]]
             ,page: true
+            ,done:function (rec) {
+                if (rec.code === 2) {
+                    layer.msg("无权访问购物车", {icon: 5, time: 1500},function () {
+                        window.location.href = "/html/welcome.html?t=1";
+                    });
+                }
+            }
         });
 
 

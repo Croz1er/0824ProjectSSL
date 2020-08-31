@@ -47,6 +47,13 @@
             ,page: true
             ,limit:5
             ,limits:[5,10,15,20,25]
+            ,done:function (rec) {
+                if (rec.code === 2) {
+                    layer.msg("无权访问购物车", {icon: 5, time: 1500},function () {
+                        window.location.href = "/html/welcome.html?t=1";
+                    });
+                }
+            }
         });
 
 

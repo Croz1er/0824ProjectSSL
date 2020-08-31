@@ -31,7 +31,7 @@ public interface ReportMapper {
     /**
      * 生成会员人数统计
      */
-    @Insert("insert into report2(userNum,roleId,roleName,createTime) values(#{userNum},#{roleId},#{roleName},#{createTime})")
+    @Insert("insert into report1(userNum,roleId,roleName,createTime) values(#{userNum},#{roleId},#{roleName},#{createTime})")
     int insertRR(RoleReport roleReport);
 
 }

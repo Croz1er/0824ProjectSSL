@@ -36,7 +36,7 @@
             table = layui.table;
 
         $.ajax({
-            url: "http://127.0.0.1:8082/user/checking.do",
+            url: "http://192.168.100.222:8082/user/checking.do",
             type: "post",
             dataType: "json",
             success: function (rec) {
@@ -54,7 +54,7 @@
 
             let roleTable = table.render({
                 elem: '#currentTableId',
-                url: 'http://127.0.0.1:8082/role/findAllRole.do',
+                url: 'http://192.168.100.222:8082/role/findAllRole.do',
                 toolbar: '#toolbarDemo',
                 defaultToolbar: ['filter', 'exports', 'print', {
                     title: '提示',
@@ -136,7 +136,7 @@
                     console.log(ids);
                     layer.confirm("确定删除角色吗?", {icon: 3}, function () {
                         $.ajax({
-                            url: 'http://127.0.0.1:8082/role/delRoles.do',
+                            url: 'http://192.168.100.222:8082/role/delRoles.do',
                             type: "post",
                             data: {ids: ids},
                             traditional: true,

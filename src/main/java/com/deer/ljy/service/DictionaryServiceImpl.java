@@ -47,14 +47,16 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Override
     public String removeDictionary(int [] ids) {
         for (Integer id : ids) {
-            List<User> allUser = userService.findAllUser();
+            List<User> allUser = userService.findAllUser1();
             System.out.println("======================"+allUser);
             Dictionary dictionary = selectDictById(id);
             System.out.println("======"+dictionary.getValueName());
 
             for (User user : allUser) {
                 System.out.println("======"+user);
-                if (user.getCardTypeName().equals(dictionary.getValueName())||user.getSex().equals(dictionary.getValueName())){
+                System.out.println(dictionary.getValueName());
+
+                if (user.getCardTypeName().equals(dictionary.getValueName())){
                     return new String("字典编号:" + id + "号,未删除成功,正在被使用");
                 }
             }

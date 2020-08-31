@@ -40,4 +40,16 @@ public class AgentServiceImpl implements AgentService {
     public List<Agent> select() {
         return agetnMapper.select();
     }
+
+    @Override
+    @Transactional
+    public int insertAgent() {
+        Integer userId = selectMaxId();
+        return agetnMapper.insertAgent(userId);
+    }
+
+    @Override
+    public int selectMaxId() {
+        return agetnMapper.selectMaxId();
+    }
 }

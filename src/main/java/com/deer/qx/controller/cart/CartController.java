@@ -8,6 +8,7 @@ import com.deer.qx.model.goods.Cart_goods;
 import com.deer.qx.service.cart.CartService;
 import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class CartController {
     private CartService cartService;
 
     //查看购物车列表
+    @RequiresPermissions({"/shop/selectCar.do","/shop"})
     @RequestMapping("/findAll.do")
     public BaseResult findAll(Cart_goods cart_goods,int page,int limit){
 

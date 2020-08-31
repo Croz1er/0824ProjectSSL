@@ -54,7 +54,7 @@
             table = layui.table;
 
         $.ajax({
-            url: "http://127.0.0.1:8082/user/checking.do",
+            url: "http://192.168.100.222:8082/user/checking.do",
             type: "post",
             dataType: "json",
             success: function (rec) {
@@ -71,7 +71,7 @@
         function init() {
             let userTable = table.render({
                 elem: '#currentTableId',
-                url: 'http://127.0.0.1:8082/user/findAll.do?level=2',
+                url: 'http://192.168.100.222:8082/user/findAll.do?level=2',
                 defaultToolbar: ['filter', 'exports', 'print', {
                     title: '提示',
                     layEvent: 'LAYTABLE_TIPS',
@@ -150,7 +150,7 @@
                     }
                     layer.confirm('确定删除?', function (index) {
                         $.ajax({
-                            url: "http://127.0.0.1:8082/user/deleteUser.do",
+                            url: "http://192.168.100.222:8082/user/deleteUser.do",
                             type: "get",
                             data: {id: data.id},
                             dataType: "json",

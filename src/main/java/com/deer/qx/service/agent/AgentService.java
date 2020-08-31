@@ -13,7 +13,11 @@ public interface AgentService {
     int del(User user);
 
     int update(User user);
+
     List<Agent> select();
 
+    int insertAgent();
+
+    int selectMaxId();
 
 }

@@ -71,5 +71,8 @@ public interface BankMapper {
     @Insert(value = "insert into account_detail (accountId,accountDate,moneyOut,type,otherAcountId,moneyIn,credit) values (#{accountId},#{accountDate},#{moneyOut},#{type},#{otherAcountId},#{moneyIn},#{credit})")
     int insertDetail(Account_detail account_detail);
 
+    @Insert("INSERT INTO user_account(userId,createTime,lastUpdateTime,createBy) VALUES(#{userId},#{createTime},#{lastUpdateTime},#{createBy})")
+    int insertUserAccount(User_account user_account);
+
 
 }

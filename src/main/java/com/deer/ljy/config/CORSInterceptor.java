@@ -13,7 +13,7 @@ public class CORSInterceptor implements HandlerInterceptor {
         //充许客端JS跨域请求
         response.setHeader("X-Frame-Options", "SAMEORIGIN");
 
-        response.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:8082");
+        response.setHeader("Access-Control-Allow-Origin", "http://192.168.100.222:8082");
         response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Credentials", "true");

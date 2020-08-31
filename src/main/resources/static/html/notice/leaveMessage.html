@@ -49,7 +49,7 @@
             ,type:"post"
             ,success:function (rec) {
                 if (rec.code==0){
-                    $("input[name=rolename]").val(rec.data.roleName);
+                    $("input[name='rolename']").val(rec.data.roleName);
                     $("input[name=username]").val(rec.data.username);
                 }
             }
@@ -96,7 +96,8 @@
         });
 
         $(document).on("click",".adminMessage",function () {
-            var rolename=$("input[name=rolename]").val();
+            var rolename=$("input[name='rolename']").val();
+            alert(rolename);
             if (rolename=="管理员"){
                 table.render({
                     elem: '#currentTableId',

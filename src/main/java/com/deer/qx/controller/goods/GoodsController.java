@@ -13,6 +13,7 @@ import com.github.pagehelper.PageInfo;
 
 import org.apache.shiro.SecurityUtils;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,6 +76,7 @@ public class GoodsController {
     }
 
     //添加商品
+    @RequiresPermissions("/shop")
     @RequestMapping("/addGoods.do")
     public BaseResult addGoods(Goods_info goods_info){
         System.out.println(goods_info.getCreateTime());
@@ -96,6 +98,7 @@ public class GoodsController {
 
 
     //添加购物车
+    @RequiresPermissions({"/shop/shopadd.do","/shop"})
     @RequestMapping("/addCar.do")
     public BaseResult addCar(Cart_goods cart_goods){
         Cart_goods cart_goods1 = goodsService.selectCar(cart_goods);
@@ -145,6 +148,7 @@ public class GoodsController {
     }
 
     //更改状态
+//    @RequiresPermissions("/shop")
     @RequestMapping("/updateState.do")
     public BaseResult updateState(Goods_info goods_info){
 

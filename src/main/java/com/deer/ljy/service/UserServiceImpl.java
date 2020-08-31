@@ -33,6 +33,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> findAllUser1() {
+        return userMapper.selectAllUser1();
+    }
+
+    @Override
     public User findUserById(Integer id) {
         return userMapper.selectById(id);
     }

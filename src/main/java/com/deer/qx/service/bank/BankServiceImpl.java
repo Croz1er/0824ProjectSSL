@@ -4,6 +4,7 @@ import com.deer.ljy.pojo.User;
 import com.deer.qx.mapper.bank.BankMapper;
 import com.deer.qx.model.account.Account_detail;
 import com.deer.qx.model.account.User_account;
+import com.deer.qx.service.agent.AgentService;
 import com.github.pagehelper.PageHelper;
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.shiro.SecurityUtils;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +24,9 @@ public class BankServiceImpl implements BankService {
 
     @Autowired
     private BankMapper bankMapper;
+
+    @Resource
+    private AgentService agentService;
 
     @Override
     @Transactional
@@ -106,5 +111,18 @@ public class BankServiceImpl implements BankService {
     @Override
     public User_account selectByBalance(int userId) {
         return bankMapper.selectByBalance(userId);
+    }
+
+    @Override
+    public int insertUserAccount() {
+        User_account user_account = new User_account();
+        Session session = SecurityUtils.getSubject().getSession();
+        User user = (User) session.getAttribute("sessionUser");
+        System.out.println(user);
+        user_account.setCreateBy(user.getUsername());
+        user_account.setUserId(agentService.selectMaxId());
+        user_account.setLastUpdateTime(new Date());
+        user_account.setCreateTime(new Date());
+        return bankMapper.insertUserAccount(user_account);
     }
 }

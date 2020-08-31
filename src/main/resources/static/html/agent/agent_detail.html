@@ -53,6 +53,13 @@
                 , {title: '操作', align: 'center', toolbar: '#barDemo'}
             ]]
             ,page: true
+            , done:function (rec) {
+                if (rec.code!==0){
+                    layer.msg("无权访问该页面", {icon: 5, time: 1500}, function () {
+                        window.location.href = "/html/welcome.html?t=1";
+                    })
+                }
+            }
         });
 
 

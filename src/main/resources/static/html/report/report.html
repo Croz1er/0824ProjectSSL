@@ -141,13 +141,13 @@
             layer = layui.layer,
             echarts = layui.echarts;
 
-        /* url: 'http://127.0.0.1:8082/',
+        /* url: 'http://192.168.100.222:8082/',
                         type: "",
                         data:{},
                         dataType: "json",
                         success: function (rec) {}*/
         $.ajax({
-            url: "http://127.0.0.1:8082/user/checking.do",
+            url: "http://192.168.100.222:8082/user/checking.do",
             type: "post",
             dataType: "json",
             success: function (rec) {
@@ -163,7 +163,7 @@
 
         function init() {
             $.ajax({
-                url: 'http://127.0.0.1:8082/report/getMR.do',
+                url: 'http://192.168.100.222:8082/report/getMR.do',
                 type: "post",
                 dataType: "json",
                 success: function (rec) {
@@ -322,7 +322,7 @@
             });
 
             $.ajax({
-                url: 'http://127.0.0.1:8082/report/getRR.do',
+                url: 'http://192.168.100.222:8082/report/getRR.do',
                 type: "post",
                 dataType: "json",
                 success: function (rec) {
@@ -429,7 +429,7 @@
                         series.push({type: 'bar'})
                     }
                     console.log(series);
-                    console.log("-------" + sources);
+                    console.log("-------" + JSON.stringify(sources));
                     var echartsDataset1 = echarts.init(document.getElementById('echarts-map'), 'walden');
                     var optionDataset1 = {
                         legend: {},

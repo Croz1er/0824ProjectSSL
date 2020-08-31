@@ -5,6 +5,7 @@ import com.deer.ljy.pojo.base.BaseResult;
 import com.deer.qx.model.agent.Agent;
 import com.deer.qx.service.agent.AgentService;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class AgentController {
     @Autowired
     private AgentService agentService;
 
+    @RequiresPermissions("/agent/select.do")
     @RequestMapping("/findAll.do")
     public BaseResult findAll(User user){
         Session session = SecurityUtils.getSubject().getSession();
